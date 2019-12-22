@@ -1,16 +1,14 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using DSharpPlus.VoiceNext;
-using Newtonsoft.Json;
-using Toast_Stalin.Events;
+using Toast_Stalin.Commands;
+using Toast_Stalin.Backend;
 
 namespace Toast_Stalin
 {
@@ -18,8 +16,8 @@ namespace Toast_Stalin
     {
         private static DiscordClient Client { get; set; } = null;
         private static CommandsNextExtension ComNextExt { get; set; } = null;
-
         private static VoiceNextExtension VoiceNextExt { get; set; } = null;
+
         private static void Main()
         {
             MainAsync().ConfigureAwait(false).GetAwaiter().GetResult();
@@ -27,30 +25,15 @@ namespace Toast_Stalin
 
         private static async Task MainAsync()
         {
-            // Load the configuration file and check if it exists
-            if (!File.Exists("Config.json"))
-            {
-                Console.WriteLine($"The configuration file 'Config.json' is missing.\nPress any key to continue...");
-                Console.ReadKey();
-                return;
-            }
-
-            ConfigJson Config = new ConfigJson();
-
-            using (var StreamConfig = File.OpenRead("Config.json"))
-            {
-                using var StreamReaderConfig = new StreamReader(StreamConfig, new UTF8Encoding(false));
-                var ReadConfig = await StreamReaderConfig.ReadToEndAsync();
-                Config = JsonConvert.DeserializeObject<ConfigJson>(ReadConfig);
-            }
-
+            await ConfigLoader.LoadConfigurationFromFile();
+                        
             // Load all client-events
-            var ClientEvents = new ClientToastStalin();
+            var ClientEvents = new EventsClient();
 
             // Initialize the client
             Client = new DiscordClient(new DiscordConfiguration
             {
-                Token = Config.Token,
+                Token = ConfigLoader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 UseInternalLogHandler = true,
@@ -67,7 +50,7 @@ namespace Toast_Stalin
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
                 UseDefaultCommandHandler = true,
-                StringPrefixes = Config.CommandPrefix,
+                StringPrefixes = ConfigLoader.CommandPrefix,
                 CaseSensitive = false,
                 EnableDefaultHelp = true,
                 EnableMentionPrefix = true,
@@ -83,7 +66,8 @@ namespace Toast_Stalin
             // Register the commands
             try
             {
-                //ComNextExt.RegisterCommands<Core>();
+                ComNextExt.RegisterCommands<Core>();
+                ComNextExt.RegisterCommands<Voice>();
                 Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Registered commands successfully.", DateTime.Now);
             }
             catch
@@ -129,10 +113,10 @@ namespace Toast_Stalin
             }
 
             // Wait for the connection to complete
-            await Task.Delay(1000);
+            await Task.Delay(2000);
 
             // Get the guild the client is connected to
-            DiscordGuild Guild = Client.Guilds.Values.Where(x => x.Name.Contains("Bunch of retards playing")).ToList().FirstOrDefault();
+            DiscordGuild Guild = Client.Guilds.Values.Where(x => x.Id == ConfigLoader.GuildId).ToList().FirstOrDefault();
 
             if (Guild == null)
             {
@@ -153,7 +137,7 @@ namespace Toast_Stalin
             }
 
             // Get the default channel the bot should be in
-            DiscordChannel DefaultChannel = Guild.Channels.Values.Where(x => x.Id == Config.DefaultChannel).ToList().FirstOrDefault();
+            DiscordChannel DefaultChannel = Guild.Channels.Values.Where(x => x.Id == ConfigLoader.DefaultChannelId).ToList().FirstOrDefault();
 
             // Connect to the channel of the random selected member
             VoiceConnection = await VoiceNextExt.ConnectAsync(DefaultChannel);
@@ -161,18 +145,6 @@ namespace Toast_Stalin
             Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Connected to channel successfully.", DateTime.Now);
 
             await Task.Delay(-1);
-        }
-
-        // Data from configuration file
-        private struct ConfigJson
-        {
-            [JsonProperty("DefaulChannel")]
-            public ulong DefaultChannel { get; private set; }
-            [JsonProperty("Prefix")]
-            public string[] CommandPrefix { get; private set; }
-
-            [JsonProperty("Token")]
-            public string Token { get; private set; }
         }
     }
 }

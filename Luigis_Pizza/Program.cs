@@ -46,7 +46,7 @@ namespace Luigis_Pizza
             }
 
             // Load all client-events
-            var ClientEvents = new ClientLuigisPizza();
+            var ClientEvents = new EventsClient();
 
             // Initialize the client
             Client = new DiscordClient(new DiscordConfiguration

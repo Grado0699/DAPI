@@ -1,5 +1,8 @@
 ﻿{
-  "DefaulChannel": "514875961741934597",
+  "DefaulChannel": "",
+  "GoulagChannel": "",
+  "Guild": "",
   "Prefix": [ ">", "Stalin" ],
+  "Time_User_Is_Goulaged": "30000",
   "Token": ""
 }
