@@ -46,7 +46,7 @@ namespace Luigis_Pizza
             }
 
             // Load all client-events
-            var ClientEvents = new Client();
+            var ClientEvents = new EventsClient();
 
             // Initialize the client
             Client = new DiscordClient(new DiscordConfiguration
@@ -151,8 +151,8 @@ namespace Luigis_Pizza
             {
                 Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Timer is enabled: going to start the worker.", DateTime.Now);
 
-                var Woker = new Worker();
-                await Woker.StartWorker(Client);
+                var ClientWorker = new Worker();
+                await ClientWorker.StartWorker(Client);
             }
             else
             {
