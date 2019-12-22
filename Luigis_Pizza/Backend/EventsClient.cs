@@ -5,7 +5,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
 
-namespace Luigis_Pizza.Events
+namespace Luigis_Pizza.Backend
 {
     public class EventsClient
     {

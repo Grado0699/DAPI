@@ -9,7 +9,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.VoiceNext;
 
-namespace Luigis_Pizza.Events
+namespace Luigis_Pizza.Backend
 {
     public class Worker
     {
@@ -67,7 +67,7 @@ namespace Luigis_Pizza.Events
                 Client.DebugLogger.LogMessage(LogLevel.Warning, Assembly.GetExecutingAssembly().GetName().Name, $"An old connection was still up, successfully closed old one.", DateTime.Now);
             }
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Retrieved a random member successfully.", DateTime.Now);
+            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Voice connection retrieved successfully.", DateTime.Now);
 
             // Check if the image and soundfile are not missing
             if (!File.Exists("Ressources/luigi.mp3") || !File.Exists("Ressources/pizza.jpg"))
