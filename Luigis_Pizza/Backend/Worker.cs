@@ -13,7 +13,7 @@ namespace Luigis_Pizza.Backend
 {
     public class Worker
     {
-        private static ProcessStartInfo StreamProcess {get;set;} = null;
+        private static ProcessStartInfo StreamProcess { get; set; } = null;
 
         public async Task StartWorker(DiscordClient Client)
         {
@@ -70,7 +70,7 @@ namespace Luigis_Pizza.Backend
             Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Voice connection retrieved successfully.", DateTime.Now);
 
             // Check if the image and soundfile are not missing
-            if (!File.Exists("Ressources/luigi.mp3") || !File.Exists("Ressources/pizza.jpg"))
+            if (!File.Exists("Ressources/pizza.mp3") || !File.Exists("Ressources/pizza.jpg"))
             {
                 Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"Either image or soundfile is missing.", DateTime.Now);
                 return;
@@ -94,7 +94,7 @@ namespace Luigis_Pizza.Backend
                 StreamProcess = new ProcessStartInfo
                 {
                     FileName = "ffmpeg.exe",
-                    Arguments = $@"-i ""{"Ressources/luigi.mp3"}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
+                    Arguments = $@"-i ""{"Ressources/pizza.mp3"}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
                     RedirectStandardOutput = true,
                     UseShellExecute = false
                 };
@@ -111,7 +111,7 @@ namespace Luigis_Pizza.Backend
                     StreamProcess = new ProcessStartInfo
                     {
                         FileName = "ffmpeg",
-                        Arguments = $@"-i ""{"Ressources/luigi.mp3"}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
+                        Arguments = $@"-i ""{"Ressources/pizza.mp3"}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
                         RedirectStandardOutput = true,
                         UseShellExecute = true
                     };
