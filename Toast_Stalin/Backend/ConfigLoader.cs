@@ -39,7 +39,7 @@ namespace Toast_Stalin.Backend
 
         private struct ConfigJson
         {
-            [JsonProperty("DefaulChannel")]
+            [JsonProperty("DefaultChannel")]
             public ulong DefaultChannelId { get; private set; }
 
             [JsonProperty("GoulagChannel")]
