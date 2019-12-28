@@ -1,17 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.VoiceNext;
-using Newtonsoft.Json;
 using Luigis_Pizza.Commands;
 using Luigis_Pizza.Backend;
-
 
 namespace Luigis_Pizza
 {
@@ -28,30 +25,28 @@ namespace Luigis_Pizza
 
         private static async Task MainAsync()
         {
-            // Load the configuration file and check if it exists
-            if(!File.Exists("Config.json"))
+            try
             {
-                Console.WriteLine($"The configuration file 'Config.json' is missing.\nPress any key to continue...");
+                await ConfigLoader.LoadConfigurationFromFile();
+            }
+            catch(FileNotFoundException FileNotFoundEx)
+            {
+                Console.WriteLine($"{FileNotFoundEx}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
-            
-            ConfigJson Config = new ConfigJson();
-
-            using (var StreamConfig = File.OpenRead("Config.json"))
+            catch(Exception Ex)
             {
-                using var StreamReaderConfig = new StreamReader(StreamConfig, new UTF8Encoding(false));
-                var ReadConfig = await StreamReaderConfig.ReadToEndAsync();
-                Config = JsonConvert.DeserializeObject<ConfigJson>(ReadConfig);
+                Console.WriteLine($"{Ex}\n\nPress any key to continue...");
+                Console.ReadKey();
+                return;
             }
-
-            // Load all client-events
+   
             var ClientEvents = new EventsClient();
 
-            // Initialize the client
             Client = new DiscordClient(new DiscordConfiguration
             {
-                Token = Config.Token,
+                Token = ConfigLoader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 UseInternalLogHandler = true,
@@ -62,13 +57,12 @@ namespace Luigis_Pizza
             Client.GuildAvailable += ClientEvents.Client_GuildAvailable;
             Client.ClientErrored += ClientEvents.Client_ClientError;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Client initialized successfully.", DateTime.Now);
+            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Client initialized successfully.", DateTime.Now);
 
-            // Initialize the command-handler
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
                 UseDefaultCommandHandler = true,
-                StringPrefixes = Config.CommandPrefix,
+                StringPrefixes = ConfigLoader.CommandPrefix,
                 CaseSensitive = false,
                 EnableDefaultHelp = true,
                 EnableMentionPrefix = true,
@@ -79,17 +73,16 @@ namespace Luigis_Pizza
             ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
             ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Command-Handler initialized successfully.", DateTime.Now);
+            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Command-Handler initialized successfully.", DateTime.Now);
             
-            // Register the commands
             try
             {
                 ComNextExt.RegisterCommands<Core>();
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Registered commands successfully.", DateTime.Now);
+                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Registered commands successfully.", DateTime.Now);
             }
             catch
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"An error occured while registering the commands.", DateTime.Now);
+                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, "An error occured while registering the commands.", DateTime.Now);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -97,31 +90,28 @@ namespace Luigis_Pizza
                 return;
             }
 
-            // Initialize the voice-handler
             Client.UseVoiceNext(new VoiceNextConfiguration
             {
                 EnableIncoming = false
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Voice-Handler initialized successfully.", DateTime.Now);
+            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Voice-Handler initialized successfully.", DateTime.Now);
 
-            // Initialize the interactivity-handler
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Interactivity-Handler initialized successfully.", DateTime.Now);
+            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Interactivity-Handler initialized successfully.", DateTime.Now);
 
-            // Connect to the API and wait for requests
             try
             {
                 await Client.ConnectAsync();
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Connected to the API successfully.", DateTime.Now);
+                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Connected to the API successfully.", DateTime.Now);
             }
             catch
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"An error occured while connecting to the API.", DateTime.Now);
+                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, "An error occured while connecting to the API. Maybe the wrong token was provided.", DateTime.Now);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -129,48 +119,54 @@ namespace Luigis_Pizza
                 return;
             }
 
-            // Initialize the timer
             ClientTimer = new Timer(Core.TimerSpan);
             ClientTimer.Elapsed += ClientTimer_Elapsed;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Timer initialized successfully.", DateTime.Now);
+            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer initialized successfully.", DateTime.Now);
 
             ClientTimer.Start();
             await Task.Delay(-1);
         }
 
-        // Triggerd when the timer elapsed
         private static async void ClientTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Timer-Elapsed-Event executed.", DateTime.Now);
+            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer-Elapsed-Event executed.", DateTime.Now);
 
             ClientTimer.Stop();
-            ClientTimer.Close();
 
             if (Core.EnableTimer)
             {
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Timer is enabled: going to start the worker.", DateTime.Now);
+                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer is enabled: going to start the worker.", DateTime.Now);
 
-                var ClientWorker = new Worker();
-                await ClientWorker.StartWorker(Client);
+                try
+                {
+                    var ClientWorker = new Worker();
+                    await ClientWorker.StartWorker(Client);
+                }
+                catch (ArgumentNullException ArgumentNullEx)
+                {
+                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{ArgumentNullEx}", DateTime.Now);
+                }
+                catch (FileNotFoundException FileNotFoundEx)
+                {
+                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{FileNotFoundEx}", DateTime.Now);
+                }
+                catch (PlatformNotSupportedException PlatformNotSupportedEx)
+                {
+                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{PlatformNotSupportedEx}", DateTime.Now);
+                }
+                catch (Exception Ex)
+                {
+                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{Ex}", DateTime.Now);
+                }
             }
             else
             {
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Timer is disabled.", DateTime.Now);
+                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer is disabled.", DateTime.Now);
             }
 
             ClientTimer.Interval = Core.TimerSpan;
             ClientTimer.Start();
-        }
-
-        // Data from configuration file
-        private struct ConfigJson
-        {
-            [JsonProperty("Prefix")]
-            public string[] CommandPrefix { get; private set; }
-
-            [JsonProperty("Token")]
-            public string Token { get; private set; }
         }
     }
 }
