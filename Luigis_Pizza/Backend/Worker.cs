@@ -99,7 +99,7 @@ namespace Luigis_Pizza.Backend
                         FileName = "ffmpeg",
                         Arguments = $@"-i ""{SoundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
                         RedirectStandardOutput = true,
-                        UseShellExecute = true
+                        UseShellExecute = false
                     };
 
                     Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Initialized streamer for Linux successfully.", DateTime.Now);

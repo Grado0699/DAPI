@@ -58,7 +58,7 @@ namespace Toast_Stalin.Backend
                         FileName = "ffmpeg",
                         Arguments = $@"-i ""{RessourceName}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
                         RedirectStandardOutput = true,
-                        UseShellExecute = true
+                        UseShellExecute = false
                     };
 
                     ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Initialized streamer for Linux successfully.", DateTime.Now);
