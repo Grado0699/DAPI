@@ -7,6 +7,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.VoiceNext;
 using Bunta.Backend;
+using Bunta.Commands;
 
 namespace Bunta
 {
@@ -74,7 +75,9 @@ namespace Bunta
 
             try
             {
-                //ComNextExt.RegisterCommands<Core>();
+                ComNextExt.RegisterCommands<Core>();
+                ComNextExt.RegisterCommands<Voice>();
+
                 Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Registered commands successfully.", DateTime.Now);
             }
             catch

@@ -10,5 +10,10 @@ namespace Bunta.Commands
 {
     public class Core : BaseCommandModule
     {
+        [Command("hi")]
+        public async Task Hi(CommandContext ctx)
+        {
+            await ctx.RespondAsync("Hi");
+        }
     }
 }
