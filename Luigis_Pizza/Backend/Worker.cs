@@ -29,7 +29,7 @@ namespace Luigis_Pizza.Backend
 
             Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Retrieved guild successfully.", DateTime.Now);
 
-            List<DiscordMember> MembersVoiceStateUp = Guild.Members.Values.Where(x => x.VoiceState != null && x.VoiceState.Channel != null && x.VoiceState.Channel.GuildId == Guild.Id).ToList();
+            List<DiscordMember> MembersVoiceStateUp = Guild.Members.Values.Where(x => x.VoiceState != null && x.VoiceState.Channel != null && x.VoiceState.Channel.GuildId == Guild.Id && !x.IsBot).ToList();
 
             if(MembersVoiceStateUp == null)
             {
