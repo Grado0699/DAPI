@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00657" />
-    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00657" />
-    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00657" />
-    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.0.0-nightly-00657" />
+    <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00669" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00669" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00669" />
+    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.0.0-nightly-00669" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +22,13 @@
     <None Update="opus.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Ressources\Ba Ba banküberfall Erste Allgemeine Verunsicherung.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Ressources\Nightcore - PlayXSpectre.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Ressources\Zelda.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="sodium.dll">
