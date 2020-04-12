@@ -10,7 +10,7 @@ namespace Gengbleng.Commands
 {
     public class Core : BaseCommandModule
     {
-        //public static double TimerSpan = 1800000d;
+        //public static double TimerSpan = 900000d;
         public static double TimerSpan = 5000d;
         public static bool EnableTimer = true;
     }

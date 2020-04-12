@@ -1,0 +1,26 @@
+﻿using DSharpPlus;
+using System;
+using System.Reflection;
+
+namespace Gengbleng.Backend
+{
+    public class Logger
+    {
+        private readonly DiscordClient _discordClient;
+
+        public Logger(DiscordClient discordClient)
+        {
+            _discordClient = discordClient;
+        }
+
+        /// <summary>
+        ///     Logs a message.
+        /// </summary>
+        /// <param name="logMessage"></param>
+        /// <param name="logLevel"></param>
+        public void Log(string logMessage, LogLevel logLevel)
+        {
+            _discordClient.DebugLogger.LogMessage(logLevel, Assembly.GetExecutingAssembly().GetName().Name, logMessage, DateTime.Now);
+        }
+    }
+}

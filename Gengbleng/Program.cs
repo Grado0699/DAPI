@@ -6,7 +6,6 @@ using Gengbleng.Backend;
 using Gengbleng.Commands;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -17,7 +16,7 @@ namespace Gengbleng
         private static DiscordClient Client { get; set; } = null;
         private static CommandsNextExtension ComNextExt { get; set; } = null;
         private static Timer ClientTimer { get; set; } = null;
-
+        private static Logger Logger { get; set; }
         private static void Main()
         {
             MainAsync().ConfigureAwait(false).GetAwaiter().GetResult();
@@ -27,7 +26,7 @@ namespace Gengbleng
         {
             try
             {
-                await ConfigLoader.LoadConfigurationFromFile();
+                await ConfigLoader.LoadConfigurationFromFileAsync();
             }
             catch (FileNotFoundException FileNotFoundEx)
             {
@@ -42,8 +41,6 @@ namespace Gengbleng
                 return;
             }
 
-            var ClientEvents = new EventsClient();
-
             Client = new DiscordClient(new DiscordConfiguration
             {
                 Token = ConfigLoader.Token,
@@ -53,11 +50,14 @@ namespace Gengbleng
                 LogLevel = LogLevel.Debug
             });
 
+            var ClientEvents = new EventsClient(Client);
+
             Client.Ready += ClientEvents.Client_Ready;
             Client.GuildAvailable += ClientEvents.Client_GuildAvailable;
             Client.ClientErrored += ClientEvents.Client_ClientError;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Client initialized successfully.", DateTime.Now);
+            Logger = new Logger(Client);
+            Logger.Log("Client initialized successfully.", LogLevel.Info);
 
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -73,16 +73,16 @@ namespace Gengbleng
             ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
             ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Command-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Command-Handler initialized successfully.", LogLevel.Info);
 
             try
             {
                 //ComNextExt.RegisterCommands<Core>();
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Registered commands successfully.", DateTime.Now);
+                Logger.Log("Registered commands successfully.", LogLevel.Info);
             }
-            catch
+            catch (Exception Ex)
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, "An error occured while registering the commands.", DateTime.Now);
+                Logger.Log($"An error occured while registering the commands.\n{Ex}", LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -95,23 +95,23 @@ namespace Gengbleng
                 EnableIncoming = false
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Voice-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Voice-Handler initialized successfully.", LogLevel.Info);
 
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Interactivity-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Info);
 
             try
             {
                 await Client.ConnectAsync();
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Connected to the API successfully.", DateTime.Now);
+                Logger.Log("Connected to the API successfully.", LogLevel.Info);
             }
-            catch
+            catch (Exception Ex)
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, "An error occured while connecting to the API. Maybe the wrong token was provided.", DateTime.Now);
+                Logger.Log($"An error occured while connecting to the API. Maybe the wrong token was provided.\n{Ex}", LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -122,7 +122,7 @@ namespace Gengbleng
             ClientTimer = new Timer(Core.TimerSpan);
             ClientTimer.Elapsed += ClientTimer_Elapsed;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer initialized successfully.", DateTime.Now);
+            Logger.Log("Timer initialized successfully.", LogLevel.Info);
 
             ClientTimer.Start();
             await Task.Delay(-1);
@@ -130,39 +130,39 @@ namespace Gengbleng
 
         private static async void ClientTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer-Elapsed-Event executed.", DateTime.Now);
+            Logger.Log("Timer-Elapsed-Event executed.", LogLevel.Debug);
 
             ClientTimer.Stop();
 
             if (Core.EnableTimer)
             {
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer is enabled: going to start the worker.", DateTime.Now);
+                Logger.Log("Timer is enabled: going to start the worker.", LogLevel.Info);
 
                 try
                 {
-                    var ClientWorker = new Worker();
-                    await ClientWorker.StartWorker(Client);
+                    var Streamer = new Streamer(Client);
+                    await Streamer.PlayRandomSoundFile();
                 }
                 catch (ArgumentNullException ArgumentNullEx)
                 {
-                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{ArgumentNullEx}", DateTime.Now);
+                    Logger.Log($"{ArgumentNullEx}", LogLevel.Error);
                 }
                 catch (FileNotFoundException FileNotFoundEx)
                 {
-                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{FileNotFoundEx}", DateTime.Now);
+                    Logger.Log($"{FileNotFoundEx}", LogLevel.Error);
                 }
                 catch (PlatformNotSupportedException PlatformNotSupportedEx)
                 {
-                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{PlatformNotSupportedEx}", DateTime.Now);
+                    Logger.Log($"{PlatformNotSupportedEx}", LogLevel.Error);
                 }
                 catch (Exception Ex)
                 {
-                    Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"{Ex}", DateTime.Now);
+                    Logger.Log($"{Ex}", LogLevel.Error);
                 }
             }
             else
             {
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer is disabled.", DateTime.Now);
+                Logger.Log("Timer is disabled.", LogLevel.Info);
             }
 
             ClientTimer.Interval = Core.TimerSpan;
