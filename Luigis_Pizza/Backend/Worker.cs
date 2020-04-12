@@ -119,7 +119,7 @@ namespace Luigis_Pizza.Backend
 
             Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Image posted successfully.", DateTime.Now);
 
-            VoiceConnection.SendSpeaking(true);
+            await VoiceConnection.SendSpeakingAsync(true);
 
             var ffmpeg = Process.Start(StreamProcess);
             var ffout = ffmpeg.StandardOutput.BaseStream;
