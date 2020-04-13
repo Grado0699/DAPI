@@ -74,7 +74,7 @@ namespace Toast_Stalin.Backend
 
             ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Connected to channel successfully.", DateTime.Now);
 
-            VoiceConnection.SendSpeaking(true);
+            await VoiceConnection.SendSpeakingAsync(true);
 
             var ffmpeg = Process.Start(StreamerProcess);
             var ffout = ffmpeg.StandardOutput.BaseStream;
