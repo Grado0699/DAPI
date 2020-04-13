@@ -1,7 +1,5 @@
 ﻿using DSharpPlus;
-using DSharpPlus.VoiceNext;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,17 +7,19 @@ using System.Threading.Tasks;
 namespace Gengbleng.Backend
 {
     public class Streamer
-    {      
+    {
+        private readonly AudioStreamer _audioStreamer;
         private readonly DiscordClient _client;
         private readonly Logger _logger;
         public Streamer(DiscordClient client)
         {
+            _audioStreamer = new AudioStreamer(client);
             _client = client;
             _logger = new Logger(client);
         }
 
         /// <summary>
-        ///     Plays a random soundfile.
+        ///     Connects to the voicechannel of a random member and plays a random soundfile.
         /// </summary>
         /// <returns></returns>
         public async Task PlayRandomSoundFile()
@@ -49,90 +49,30 @@ namespace Gengbleng.Backend
 
             _logger.Log("Retrieved a random member successfully.", LogLevel.Debug);
 
-            var VoiceNextExt = _client.GetVoiceNext();
-            var VoiceConnection = VoiceNextExt.GetConnection(Guild);
-
-            if (VoiceConnection != null)
-            {
-                VoiceConnection.Disconnect();
-                _logger.Log("An old connection was still up, successfully closed old one.", LogLevel.Warning);
-            }
-
-            _logger.Log("Voice connection retrieved successfully.", LogLevel.Debug);
-
             var SoundFiles = Directory.GetFiles(@"Ressources\", "*.ogg");
-            var SoundFile = SoundFiles[RandomNumber.Next(0, SoundFiles.Length -1 )];
+            var SoundFile = SoundFiles[RandomNumber.Next(0, SoundFiles.Length - 1)];
 
             if (!File.Exists(SoundFile))
             {
                 throw new FileNotFoundException("Either image or soundfile is missing.");
             }
 
-            var StreamProcess = new ProcessStartInfo();
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            try
             {
-                _logger.Log("Application is running on Windows.", LogLevel.Debug);
-
-                if (!File.Exists("ffmpeg.exe"))
-                {
-                    throw new FileNotFoundException("ffmpeg.exe is missing.");
-                }
-
-                StreamProcess = new ProcessStartInfo
-                {
-                    FileName = "ffmpeg.exe",
-                    Arguments = $@"-i ""{SoundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false
-                };
-
-                _logger.Log("Initialized streamer for Windows successfully.", LogLevel.Info);
+                await _audioStreamer.PlaySoundFileAsync(SoundFile, RandomMember.VoiceState.Channel);
             }
-            else
+            catch (FileNotFoundException FileNotFoundEx)
             {
-                if (Environment.OSVersion.Platform == PlatformID.Unix)
-                {
-                    _logger.Log("Application is running on Linux.", LogLevel.Debug);
-
-                    StreamProcess = new ProcessStartInfo
-                    {
-                        FileName = "ffmpeg",
-                        Arguments = $@"-i ""{SoundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false
-                    };
-
-                    _logger.Log("Initialized streamer for Linux successfully.", LogLevel.Info);
-                }
-                else
-                {
-                    throw new PlatformNotSupportedException("Application is running on an unsupported OS.");
-                }
+                _logger.Log($"{FileNotFoundEx}", LogLevel.Error);
             }
-
-            if(VoiceConnection == null)
+            catch (PlatformNotSupportedException PlatformNotSupportedEx)
             {
-                VoiceConnection = await VoiceNextExt.ConnectAsync(RandomMember.VoiceState.Channel);
+                _logger.Log($"{PlatformNotSupportedEx}", LogLevel.Error);
             }
-
-            _logger.Log("Connected to channel successfully.", LogLevel.Info);
-
-            await VoiceConnection.SendSpeakingAsync(true);
-
-            var ffmpeg = Process.Start(StreamProcess);
-            var ffout = ffmpeg.StandardOutput.BaseStream;
-            var txStream = VoiceConnection.GetTransmitStream();
-
-            await ffout.CopyToAsync(txStream);
-            await txStream.FlushAsync();
-            await VoiceConnection.WaitForPlaybackFinishAsync();
-
-            _logger.Log("Playback finished successfully.", LogLevel.Info);
-
-            VoiceConnection.Disconnect();
-
-            _logger.Log("Disconnected from channel successfully.", LogLevel.Info);
+            catch (Exception Ex)
+            {
+                _logger.Log($"{Ex}", LogLevel.Error);
+            }
         }
     }
 }

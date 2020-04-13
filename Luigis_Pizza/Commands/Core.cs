@@ -10,7 +10,9 @@ namespace Luigis_Pizza.Commands
 {
     public class Core : BaseCommandModule
     {
-        public static double TimerSpan = 1800000d;
+        //public static double TimerSpan = 1800000d;
+        public static double TimerSpan = 5000d;
+
         public static bool EnableTimer = true;
 
         [Command("toggletimer"), Aliases("-tt"), Description("This command enables/disables the timer. It also uses interactity with a configured timespan of 15 seconds.")]

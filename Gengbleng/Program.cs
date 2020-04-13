@@ -77,7 +77,7 @@ namespace Gengbleng
 
             try
             {
-                //ComNextExt.RegisterCommands<Core>();
+                ComNextExt.RegisterCommands<Core>();
                 Logger.Log("Registered commands successfully.", LogLevel.Info);
             }
             catch (Exception Ex)
@@ -162,7 +162,7 @@ namespace Gengbleng
             }
             else
             {
-                Logger.Log("Timer is disabled.", LogLevel.Info);
+                Logger.Log("Timer is disabled.", LogLevel.Warning);
             }
 
             ClientTimer.Interval = Core.TimerSpan;
