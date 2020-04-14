@@ -9,7 +9,7 @@ namespace Gengbleng.Commands
 {
     public class Core : BaseCommandModule
     {
-        public static double TimerSpan = 1800000;
+        public static double TimerSpan = 10000;
         public static bool EnableTimer = true;
 
         [Command("settimer"), Aliases("-t"), Description("Enable/disable the timer.")]
