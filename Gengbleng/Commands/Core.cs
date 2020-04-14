@@ -12,7 +12,7 @@ namespace Gengbleng.Commands
         public static double TimerSpan = 1800000;
         public static bool EnableTimer = true;
 
-        [Command("settimer"), Aliases("-t"), Description("Enable/disable the timer.")]
+        [Command("settimer"), Aliases("t"), Description("Enable/disable the timer.")]
         public async Task SetTimer(CommandContext ctx)
         {
             var InterActExt = ctx.Client.GetInteractivity();
@@ -44,7 +44,7 @@ namespace Gengbleng.Commands
             }
         }
 
-        [Command("interval"), Aliases("-i"), Description("Set new timer interval.")]
+        [Command("interval"), Aliases("i"), Description("Set new timer interval.")]
         public async Task SetInterval(CommandContext ctx)
         {
             var InterActExt = ctx.Client.GetInteractivity();
@@ -57,12 +57,12 @@ namespace Gengbleng.Commands
             {
                 TimerSpan *= 1000d;
 
-                await ctx.RespondAsync($"Interval set to: `{TimerSpan/1000d}`.");
+                await ctx.RespondAsync($"Interval set to: `{TimerSpan/1000d}` seconds.");
             }
             else
             {
-                TimerSpan = 900000d;
-                await ctx.RespondAsync($"Invalid input. Set interval to default value: `{TimerSpan/1000d}`.");
+                TimerSpan = 1800000;
+                await ctx.RespondAsync($"Invalid input. Set interval to default value: `{TimerSpan/1000d}` seconds.");
             }
         }
 
