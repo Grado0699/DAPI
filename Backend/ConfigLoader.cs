@@ -3,9 +3,9 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gengbleng.Backend
+namespace Backend
 {
-    public static class ConfigLoader
+    public class ConfigLoader
     {
         private const string ConfigFileName = "Config.json";
         public static string[] CommandPrefix { get; set; }

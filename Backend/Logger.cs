@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-namespace Gengbleng.Backend
+namespace Backend
 {
     public class Logger
     {
