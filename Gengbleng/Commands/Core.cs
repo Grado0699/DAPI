@@ -9,7 +9,7 @@ namespace Gengbleng.Commands
 {
     public class Core : BaseCommandModule
     {
-        public static double TimerSpan = 10000;
+        public static double TimerSpan = 1800000;
         public static bool EnableTimer = true;
 
         [Command("settimer"), Aliases("-t"), Description("Enable/disable the timer.")]
@@ -69,7 +69,7 @@ namespace Gengbleng.Commands
         [Command("barrel"), Aliases("b"), Description("BARREL!")]
         public async Task Barrel(CommandContext ctx)
         {
-            const string soundFile = "Ressources\\E1.ogg";
+            const string soundFile = "Ressources/E1.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel);

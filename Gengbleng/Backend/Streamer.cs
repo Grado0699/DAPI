@@ -49,7 +49,7 @@ namespace Gengbleng.Backend
 
             _logger.Log("Retrieved a random member successfully.", LogLevel.Debug);
 
-            var SoundFiles = Directory.GetFiles(@"Ressources\", "*.ogg");
+            var SoundFiles = Directory.GetFiles(@"Ressources/", "*.ogg");
             var SoundFile = SoundFiles[RandomNumber.Next(0, SoundFiles.Length - 1)];
 
             if (!File.Exists(SoundFile))
