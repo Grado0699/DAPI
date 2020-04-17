@@ -75,7 +75,7 @@ namespace Gengbleng.Commands
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("ShotgunKnees"), Aliases("s"), Description("BARREL!")]
+        [Command("shotgunknees"), Aliases("s"), Description("BARREL!")]
         public async Task ShotgunKnees(CommandContext ctx)
         {
             const string soundFile = "Ressources/ShotgunKnees.ogg";
