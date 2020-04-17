@@ -60,7 +60,7 @@ namespace Gengbleng.Backend
 
             try
             {
-                await _audioStreamer.PlaySoundFileAsync(SoundFile, RandomMember.VoiceState.Channel);
+                await _audioStreamer.PlaySoundFileAsync(SoundFile, RandomMember.VoiceState.Channel, "10");
             }
             catch (FileNotFoundException FileNotFoundEx)
             {

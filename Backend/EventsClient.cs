@@ -1,10 +1,9 @@
-﻿using Backend;
-using DSharpPlus;
+﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
 using System.Threading.Tasks;
 
-namespace Gengbleng.Backend
+namespace Backend
 {
     public class EventsClient
     {
@@ -17,6 +16,11 @@ namespace Gengbleng.Backend
 
         public async Task Client_Ready(ReadyEventArgs e)
         {
+            if (e is null)
+            {
+                throw new System.ArgumentNullException(nameof(e));
+            }
+
             _logger.Log("Client is ready to proceed events.", LogLevel.Info);
             await Task.CompletedTask;
         }

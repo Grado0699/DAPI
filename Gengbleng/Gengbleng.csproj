@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00683" />
-    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00683" />
-    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00683" />
-    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.0.0-nightly-00683" />
+    <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00684" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00684" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00684" />
+    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.0.0-nightly-00684" />
   </ItemGroup>
 
   <ItemGroup>
@@ -306,6 +306,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Ressources\Recall3.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Ressources\ShotgunKnees.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Ressources\StatikkShiv1.ogg">

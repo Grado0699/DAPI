@@ -25,8 +25,9 @@ namespace Backend
         /// </summary>
         /// <param name="soundFile"></param>
         /// <param name="voiceChannel"></param>
+        /// <param name="volume"></param>
         /// <returns></returns>
-        public async Task PlaySoundFileAsync(string soundFile, DiscordChannel voiceChannel)
+        public async Task PlaySoundFileAsync(string soundFile, DiscordChannel voiceChannel, string volume = "100")
         {
             var VoiceNextExt = _client.GetVoiceNext();
 
@@ -60,12 +61,10 @@ namespace Backend
                 Streamer = new ProcessStartInfo
                 {
                     FileName = "ffmpeg.exe",
-                    Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
+                    Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}",
                     RedirectStandardOutput = true,
                     UseShellExecute = false
                 };
-
-                _logger.Log("Initialized streamer for Windows successfully.", LogLevel.Info);
             }
             else
             {
@@ -76,18 +75,18 @@ namespace Backend
                     Streamer = new ProcessStartInfo
                     {
                         FileName = "ffmpeg",
-                        Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol 10",
+                        Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}",
                         RedirectStandardOutput = true,
                         UseShellExecute = false
                     };
-
-                    _logger.Log("Initialized streamer for Linux successfully.", LogLevel.Info);
                 }
                 else
                 {
                     throw new PlatformNotSupportedException("Application is running on an unsupported OS.");
                 }
             }
+
+            _logger.Log("Initialized streamer successfully.", LogLevel.Info);
 
             await VoiceConnection.SendSpeakingAsync(true);
 

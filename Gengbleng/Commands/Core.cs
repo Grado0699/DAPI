@@ -72,7 +72,16 @@ namespace Gengbleng.Commands
             const string soundFile = "Ressources/E1.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
-            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
+        [Command("ShotgunKnees"), Aliases("s"), Description("BARREL!")]
+        public async Task ShotgunKnees(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/ShotgunKnees.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "500");
         }
     }
 }
