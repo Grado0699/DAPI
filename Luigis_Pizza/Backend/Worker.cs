@@ -131,6 +131,7 @@ namespace Luigis_Pizza.Backend
 
             Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Playback finished successfully.", DateTime.Now);
 
+            await VoiceConnection.SendSpeakingAsync(false);
             VoiceConnection.Disconnect();
 
             Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Disconnected from channel successfully.", DateTime.Now);

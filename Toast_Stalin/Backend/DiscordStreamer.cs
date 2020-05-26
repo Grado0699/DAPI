@@ -86,6 +86,8 @@ namespace Toast_Stalin.Backend
 
             ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Playback finished successfully.", DateTime.Now);
 
+            await VoiceConnection.SendSpeakingAsync(false);
+
             VoiceConnection.Disconnect();
 
             ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Disconnected from channel successfully.", DateTime.Now);

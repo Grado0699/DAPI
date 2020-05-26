@@ -100,6 +100,7 @@ namespace Backend
 
             _logger.Log("Playback finished successfully.", LogLevel.Info);
 
+            await VoiceConnection.SendSpeakingAsync(false);
             VoiceConnection.Disconnect();
 
             _logger.Log("Disconnected from channel successfully.", LogLevel.Info);
