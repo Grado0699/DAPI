@@ -3,6 +3,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Interactivity;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Gengbleng.Commands
@@ -33,7 +34,7 @@ namespace Gengbleng.Commands
                 EnableTimer = !EnableTimer;
                 await ctx.RespondAsync($"Timer set to `{EnableTimer}`.");
             }
-            else if(Message.Result.Content.ToLower().Contains("n"))
+            else if (Message.Result.Content.ToLower().Contains("n"))
             {
                 await ctx.RespondAsync("Do nothing.");
             }
@@ -49,7 +50,7 @@ namespace Gengbleng.Commands
         {
             var InterActExt = ctx.Client.GetInteractivity();
 
-            await ctx.RespondAsync($"Current interval is `{TimerSpan/1000d}`. Enter new interval in `x seconds`:");
+            await ctx.RespondAsync($"Current interval is `{TimerSpan / 1000d}`. Enter new interval in `x seconds`:");
 
             var Message = await InterActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
 
@@ -57,12 +58,12 @@ namespace Gengbleng.Commands
             {
                 TimerSpan *= 1000d;
 
-                await ctx.RespondAsync($"Interval set to: `{TimerSpan/1000d}` seconds.");
+                await ctx.RespondAsync($"Interval set to: `{TimerSpan / 1000d}` seconds.");
             }
             else
             {
                 TimerSpan = 1800000;
-                await ctx.RespondAsync($"Invalid input. Set interval to default value: `{TimerSpan/1000d}` seconds.");
+                await ctx.RespondAsync($"Invalid input. Set interval to default value: `{TimerSpan / 1000d}` seconds.");
             }
         }
 
@@ -75,13 +76,30 @@ namespace Gengbleng.Commands
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("shotgunknees"), Aliases("s"), Description("BARREL!")]
+        [Command("shotgunknees"), Aliases("s"), Description("Plays the 'Shotgun-Knees' sound.")]
         public async Task ShotgunKnees(CommandContext ctx)
         {
             const string soundFile = "Ressources/ShotgunKnees.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "500");
+        }
+
+        [Command("random"), Aliases("r"), Description("Play")]
+        public async Task PlayRandomSoundFile(CommandContext ctx)
+        {
+            var random = new Random();
+
+            var allSoundFiles = Directory.GetFiles(@"Ressources/", "*.ogg");
+            var randomSoundFile = allSoundFiles[random.Next(0, allSoundFiles.Length - 1)];
+
+            if (!File.Exists(randomSoundFile))
+            {
+                throw new FileNotFoundException("Either image or soundfile is missing.");
+            }
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(randomSoundFile, ctx.Member.VoiceState.Channel, "10");
         }
     }
 }
