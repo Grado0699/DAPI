@@ -6,6 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\VoiceSetup\ffmpeg.exe" Link="ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\VoiceSetup\libopus.dll" Link="libopus.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\VoiceSetup\libsodium.dll" Link="libsodium.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00699" />
     <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00699" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00699" />
@@ -16,16 +28,10 @@
     <None Update="Config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ffmpeg.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="opus.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Ressources\pizza.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="sodium.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Ressources\pizza.jpg">
