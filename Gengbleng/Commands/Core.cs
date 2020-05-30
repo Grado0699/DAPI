@@ -10,7 +10,7 @@ namespace Gengbleng.Commands
     public class Core : BaseCommandModule
     {
         public static double TimerSpan = 1800000;
-        public static bool EnableTimer = true;
+        public static bool EnableTimer = false;
 
         [Command("settimer"), Aliases("t"), Description("Enable/disable the timer.")]
         public async Task SetTimer(CommandContext ctx)

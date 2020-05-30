@@ -12,7 +12,7 @@ namespace Luigis_Pizza.Commands
     {
         public static double TimerSpan = 2700000d;
 
-        public static bool EnableTimer = true;
+        public static bool EnableTimer = false;
 
         [Command("toggletimer"), Aliases("-tt"), Description("This command enables/disables the timer. It also uses interactity with a configured timespan of 15 seconds.")]
         public async Task ToggleTimer(CommandContext ctx)
