@@ -28,6 +28,9 @@
     <None Update="Ressources\ExaSupreme.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Ressources\HappyBirthday.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Ressources\StalinExaSupreme.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
