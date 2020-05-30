@@ -47,44 +47,13 @@ namespace Backend
 
             _logger.Log("Connected to channel successfully.", LogLevel.Info);
 
-            var Streamer = new ProcessStartInfo();
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            var Streamer = new ProcessStartInfo
             {
-                _logger.Log("Application is running on Windows.", LogLevel.Debug);
-
-                if (!File.Exists("ffmpeg.exe"))
-                {
-                    throw new FileNotFoundException("ffmpeg.exe is missing.");
-                }
-
-                Streamer = new ProcessStartInfo
-                {
-                    FileName = "ffmpeg.exe",
-                    Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false
-                };
-            }
-            else
-            {
-                if (Environment.OSVersion.Platform == PlatformID.Unix)
-                {
-                    _logger.Log("Application is running on Linux.", LogLevel.Debug);
-
-                    Streamer = new ProcessStartInfo
-                    {
-                        FileName = "ffmpeg",
-                        Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false
-                    };
-                }
-                else
-                {
-                    throw new PlatformNotSupportedException("Application is running on an unsupported OS.");
-                }
-            }
+                FileName = "ffmpeg",
+                Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}",
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
 
             _logger.Log("Initialized streamer successfully.", LogLevel.Info);
 
