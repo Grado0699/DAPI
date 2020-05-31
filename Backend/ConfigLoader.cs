@@ -9,6 +9,7 @@ namespace Backend
     {
         private const string ConfigFileName = "Config.json";
         public static string[] CommandPrefix { get; set; }
+        public static ulong DefaultChannelId { get; set; }
         public static ulong GuildId { get; set; }
         public static string Token { get; set; }
 
@@ -35,10 +36,14 @@ namespace Backend
 
         private struct ConfigJson
         {
-            [JsonProperty("Guild")]
-            public ulong GuildId { get; private set; }
             [JsonProperty("Prefix")]
             public string[] CommandPrefix { get; private set; }
+
+            [JsonProperty("DefaultChannel")]
+            public ulong DefaultChannelId { get; private set; }
+
+            [JsonProperty("Guild")]
+            public ulong GuildId { get; private set; }
 
             [JsonProperty("Token")]
             public string Token { get; private set; }

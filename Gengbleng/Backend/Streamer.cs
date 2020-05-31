@@ -55,24 +55,24 @@ namespace Gengbleng.Backend
 
             if (!File.Exists(SoundFile))
             {
-                throw new FileNotFoundException("Either image or soundfile is missing.");
+                throw new FileNotFoundException("Soundfile could not be found.");
             }
 
             try
             {
                 await _audioStreamer.PlaySoundFileAsync(SoundFile, RandomMember.VoiceState.Channel, "10");
             }
-            catch (FileNotFoundException FileNotFoundEx)
+            catch (FileNotFoundException fileNotFoundException)
             {
-                _logger.Log($"{FileNotFoundEx}", LogLevel.Error);
+                _logger.Log($"{fileNotFoundException}", LogLevel.Error);
             }
-            catch (PlatformNotSupportedException PlatformNotSupportedEx)
+            catch (PlatformNotSupportedException platformNotSupportedException)
             {
-                _logger.Log($"{PlatformNotSupportedEx}", LogLevel.Error);
+                _logger.Log($"{platformNotSupportedException}", LogLevel.Error);
             }
-            catch (Exception Ex)
+            catch (Exception exception)
             {
-                _logger.Log($"{Ex}", LogLevel.Error);
+                _logger.Log($"{exception}", LogLevel.Error);
             }
         }
     }

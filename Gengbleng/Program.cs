@@ -29,15 +29,15 @@ namespace Gengbleng
             {
                 await ConfigLoader.LoadConfigurationFromFileAsync();
             }
-            catch (FileNotFoundException FileNotFoundEx)
+            catch (FileNotFoundException fileNotFoundException)
             {
-                Console.WriteLine($"{FileNotFoundEx}\n\nPress any key to continue...");
+                Console.WriteLine($"{fileNotFoundException}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
-            catch (Exception Ex)
+            catch (Exception exception)
             {
-                Console.WriteLine($"{Ex}\n\nPress any key to continue...");
+                Console.WriteLine($"{exception}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
@@ -81,9 +81,9 @@ namespace Gengbleng
                 ComNextExt.RegisterCommands<Core>();
                 Logger.Log("Registered commands successfully.", LogLevel.Info);
             }
-            catch (Exception Ex)
+            catch (Exception exception)
             {
-                Logger.Log($"An error occured while registering the commands.\n{Ex}", LogLevel.Error);
+                Logger.Log($"An error occured while registering the commands.\n{exception}", LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -110,9 +110,9 @@ namespace Gengbleng
                 await Client.ConnectAsync();
                 Logger.Log("Connected to the API successfully.", LogLevel.Info);
             }
-            catch (Exception Ex)
+            catch (Exception exception)
             {
-                Logger.Log($"An error occured while connecting to the API. Maybe the wrong token was provided.\n{Ex}", LogLevel.Error);
+                Logger.Log($"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -144,21 +144,21 @@ namespace Gengbleng
                     var Streamer = new Streamer(Client);
                     await Streamer.PlayRandomSoundFile();
                 }
-                catch (ArgumentNullException ArgumentNullEx)
+                catch (ArgumentNullException argumentNullException)
                 {
-                    Logger.Log($"{ArgumentNullEx}", LogLevel.Error);
+                    Logger.Log($"{argumentNullException}", LogLevel.Error);
                 }
-                catch (FileNotFoundException FileNotFoundEx)
+                catch (FileNotFoundException fileNotFoundException)
                 {
-                    Logger.Log($"{FileNotFoundEx}", LogLevel.Error);
+                    Logger.Log($"{fileNotFoundException}", LogLevel.Error);
                 }
-                catch (PlatformNotSupportedException PlatformNotSupportedEx)
+                catch (PlatformNotSupportedException platformNotSupportedException)
                 {
-                    Logger.Log($"{PlatformNotSupportedEx}", LogLevel.Error);
+                    Logger.Log($"{platformNotSupportedException}", LogLevel.Error);
                 }
-                catch (Exception Ex)
+                catch (Exception exception)
                 {
-                    Logger.Log($"{Ex}", LogLevel.Error);
+                    Logger.Log($"{exception}", LogLevel.Error);
                 }
             }
             else
