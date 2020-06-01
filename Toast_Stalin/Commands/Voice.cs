@@ -1,81 +1,50 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using DSharpPlus;
+﻿using Backend;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.VoiceNext;
-using Toast_Stalin.Backend;
+using System.Threading.Tasks;
 
 namespace Toast_Stalin.Commands
 {
     public class Voice : BaseCommandModule
     {
-        [Command("supreme"), Aliases("-sp"), Description("Slava!")]
+        [Command("supreme"), Aliases("s"), Description("Slava!")]
         public async Task Supreme(CommandContext ctx)
         {
-            const string RessourceName = "Ressources/Supreme.mp3";
+            const string soundFile = "Ressources/Supreme.mp3";
 
-            if (!RessourceChecker.IsRessourceAvailable(RessourceName))
-            {
-                ctx.Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is missing.", DateTime.Now);
-                return;
-            }
-
-            ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is present.", DateTime.Now);
-
-            await DiscordStreamer.StreamToDiscord(ctx, RessourceName);
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("supreme+"), Aliases("-sp+"), Description("Bogatyye!")]
+        [Command("supreme+"), Aliases("s+"), Description("Bogatyye!")]
         public async Task SupremePlus(CommandContext ctx)
         {
-            const string RessourceName = "Ressources/SupremePlus.mp3";
+            const string soundFile = "Ressources/SupremePlus.mp3";
 
-            if (!RessourceChecker.IsRessourceAvailable(RessourceName))
-            {
-                ctx.Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is missing.", DateTime.Now);
-                return;
-            }
-
-            ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is present.", DateTime.Now);
-
-            await DiscordStreamer.StreamToDiscord(ctx, RessourceName);
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("exasupreme"), Aliases("-es"), Description("Moshchnost'!")]
+        [Command("exasupreme"), Aliases("es"), Description("Moshchnost'!")]
         public async Task ExaSupreme(CommandContext ctx)
         {
-            const string RessourceName = "Ressources/ExaSupreme.mp3";
+            const string soundFile = "Ressources/ExaSupreme.mp3";
 
-            if (!RessourceChecker.IsRessourceAvailable(RessourceName))
-            {
-                ctx.Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is missing.", DateTime.Now);
-                return;
-            }
-
-            ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is present.", DateTime.Now);
-
-            await DiscordStreamer.StreamToDiscord(ctx, RessourceName);
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("boris"), Aliases("-b"), Description("Moya lyubimaya muzyka, Boris!")]
+        [Command("boris"), Aliases("b"), Description("Moya lyubimaya muzyka, Boris!")]
         public async Task Hardbass(CommandContext ctx)
         {
-            const string RessourceName = "Ressources/Boris.mp3";
+            const string soundFile = "Ressources/Boris.mp3";
 
-            if (!RessourceChecker.IsRessourceAvailable(RessourceName))
-            {
-                ctx.Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is missing.", DateTime.Now);
-                return;
-            }
-
-            ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Ressource {RessourceName} is present.", DateTime.Now);
-
-            await DiscordStreamer.StreamToDiscord(ctx, RessourceName);
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("leave"), Aliases("-l"), Description("Pokinut' kanal!")]
+        [Command("leave"), Aliases("l"), Description("Pokinut' kanal!")]
         public async Task LeaveChannel(CommandContext ctx)
         {
             var VoiceNextExt = ctx.Client.GetVoiceNext();
@@ -84,12 +53,10 @@ namespace Toast_Stalin.Commands
             if (VoiceConnection == null)
             {
                 await ctx.RespondAsync($"There is currently no voice connection up. Into Goulag with you!");
-                ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"There is currently no voice connection up.", DateTime.Now);
                 return;
             }
 
             VoiceConnection.Disconnect();
-            ctx.Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Successfully closed connection to voice channel.", DateTime.Now);
         }
     }
 }

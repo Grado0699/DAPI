@@ -15,9 +15,9 @@ namespace Luigis_Pizza
 {
     class Program
     {
-        private static DiscordClient Client { get; set; } = null;
-        private static CommandsNextExtension ComNextExt { get; set; } = null;
-        private static Timer ClientTimer { get; set; } = null;
+        private static DiscordClient Client { get; set; }
+        private static CommandsNextExtension ComNextExt { get; set; }
+        private static Timer ClientTimer { get; set; }
         private static Logger Logger { get; set; }
 
         private static void Main()

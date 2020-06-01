@@ -1,9 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.VoiceNext;
-using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,7 +19,7 @@ namespace Backend
         }
 
         /// <summary>
-        ///     Connects to a specified channel and plays an audiofile.
+        ///     Connects to the a channel and plays a soundfile.
         /// </summary>
         /// <param name="soundFile"></param>
         /// <param name="voiceChannel"></param>
@@ -55,7 +53,7 @@ namespace Backend
                 UseShellExecute = false
             };
 
-            _logger.Log("Initialized streamer successfully.", LogLevel.Info);
+            _logger.Log("Initialized streamer successfully.", LogLevel.Debug);
 
             await VoiceConnection.SendSpeakingAsync(true);
 
@@ -67,7 +65,7 @@ namespace Backend
             await txStream.FlushAsync();
             await VoiceConnection.WaitForPlaybackFinishAsync();
 
-            _logger.Log("Playback finished successfully.", LogLevel.Info);
+            _logger.Log("Playback finished successfully.", LogLevel.Debug);
 
             await VoiceConnection.SendSpeakingAsync(false);
             VoiceConnection.Disconnect();

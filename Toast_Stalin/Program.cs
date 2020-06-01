@@ -1,22 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using Backend;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
-using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using DSharpPlus.VoiceNext;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Toast_Stalin.Commands;
-using Toast_Stalin.Backend;
 
 namespace Toast_Stalin
 {
     class Program
     {
-        private static DiscordClient Client { get; set; } = null;
-        private static CommandsNextExtension ComNextExt { get; set; } = null;
-        private static VoiceNextExtension VoiceNextExt { get; set; } = null;
+        private static DiscordClient Client { get; set; }
+        private static CommandsNextExtension ComNextExt { get; set; }
+        private static Logger Logger { get; set; }
 
         private static void Main()
         {
@@ -25,12 +23,23 @@ namespace Toast_Stalin
 
         private static async Task MainAsync()
         {
-            await ConfigLoader.LoadConfigurationFromFile();
-                        
-            // Load all client-events
-            var ClientEvents = new EventsClient();
+            try
+            {
+                await ConfigLoader.LoadConfigurationFromFileAsync();
+            }
+            catch (FileNotFoundException fileNotFoundException)
+            {
+                Console.WriteLine($"{fileNotFoundException}\n\nPress any key to continue...");
+                Console.ReadKey();
+                return;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"{exception}\n\nPress any key to continue...");
+                Console.ReadKey();
+                return;
+            }
 
-            // Initialize the client
             Client = new DiscordClient(new DiscordConfiguration
             {
                 Token = ConfigLoader.Token,
@@ -40,13 +49,15 @@ namespace Toast_Stalin
                 LogLevel = LogLevel.Debug
             });
 
+            var ClientEvents = new EventsClient(Client);
+
             Client.Ready += ClientEvents.Client_Ready;
             Client.GuildAvailable += ClientEvents.Client_GuildAvailable;
             Client.ClientErrored += ClientEvents.Client_ClientError;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Client initialized successfully.", DateTime.Now);
+            Logger = new Logger(Client);
+            Logger.Log("Client initialized successfully.", LogLevel.Info);
 
-            // Initialize the command-handler
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
                 UseDefaultCommandHandler = true,
@@ -61,18 +72,17 @@ namespace Toast_Stalin
             ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
             ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Command-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Command-Handler initialized successfully.", LogLevel.Info);
 
-            // Register the commands
             try
             {
                 ComNextExt.RegisterCommands<Core>();
                 ComNextExt.RegisterCommands<Voice>();
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Registered commands successfully.", DateTime.Now);
+                Logger.Log("Registered commands successfully.", LogLevel.Info);
             }
-            catch
+            catch (Exception exception)
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"An error occured while registering the commands.", DateTime.Now);
+                Logger.Log($"An error occured while registering the commands.\n{exception}", LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -80,69 +90,34 @@ namespace Toast_Stalin
                 return;
             }
 
-            // Initialize the voice-handler
             Client.UseVoiceNext(new VoiceNextConfiguration
             {
                 EnableIncoming = false
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Voice-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Voice-Handler initialized successfully.", LogLevel.Info);
 
-            // Initialize the interactivity-handler
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Interactivity-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Info);
 
-            // Connect to the API and wait for requests
             try
             {
                 await Client.ConnectAsync();
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Connected to the API successfully.", DateTime.Now);
+                Logger.Log("Connected to the API successfully.", LogLevel.Info);
             }
-            catch
+            catch (Exception exception)
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"An error occured while connecting to the API.", DateTime.Now);
+                Logger.Log($"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
 
                 return;
             }
-
-            // Wait for the connection to complete
-            await Task.Delay(2000);
-
-            // Get the guild the client is connected to
-            DiscordGuild Guild = Client.Guilds.Values.Where(x => x.Id == ConfigLoader.GuildId).ToList().FirstOrDefault();
-
-            if (Guild == null)
-            {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, $"An error occured while retrieving guild information.", DateTime.Now);
-                return;
-            }
-
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Retrieved guild successfully.", DateTime.Now);
-
-            // Get the voice-connection to this guild
-            VoiceNextExt = Client.GetVoiceNext();
-            var VoiceConnection = VoiceNextExt.GetConnection(Guild);
-
-            if (VoiceConnection != null)
-            {
-                VoiceConnection.Disconnect();
-                Client.DebugLogger.LogMessage(LogLevel.Warning, Assembly.GetExecutingAssembly().GetName().Name, $"An old connection was still up, successfully closed old one.", DateTime.Now);
-            }
-
-            // Get the default channel the bot should be in
-            DiscordChannel DefaultChannel = Guild.Channels.Values.Where(x => x.Id == ConfigLoader.DefaultChannelId).ToList().FirstOrDefault();
-
-            // Connect to the channel of the random selected member
-            VoiceConnection = await VoiceNextExt.ConnectAsync(DefaultChannel);
-
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, $"Connected to channel successfully.", DateTime.Now);
 
             await Task.Delay(-1);
         }
