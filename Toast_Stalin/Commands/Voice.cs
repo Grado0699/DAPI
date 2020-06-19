@@ -44,6 +44,42 @@ namespace Toast_Stalin.Commands
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
+        [Command("slap"), Aliases("ls"), Description("Шлепок!")]
+        public async Task SlapLow(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/Slap_low.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
+        [Command("slapper"), Aliases("ms"), Description("Племянник!")]
+        public async Task SlapMedium(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/Slap_medium.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
+        [Command("slappest"), Aliases("hs"), Description("Слаппест!")]
+        public async Task SlapHard(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/Slap_hard.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
+        [Command("megaslap"), Aliases("ms"), Description("Мегаслап!")]
+        public async Task SlapAll(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/Slap_all.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
         [Command("leave"), Aliases("l"), Description("Pokinut' kanal!")]
         public async Task LeaveChannel(CommandContext ctx)
         {
