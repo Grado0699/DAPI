@@ -71,7 +71,7 @@ namespace Toast_Stalin.Commands
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("megaslap"), Aliases("ms"), Description("Мегаслап!")]
+        [Command("megaslap"), Aliases("s+"), Description("Мегаслап!")]
         public async Task SlapAll(CommandContext ctx)
         {
             const string soundFile = "Ressources/Slap_all.ogg";
