@@ -317,6 +317,9 @@
     <None Update="Ressources\Recall3.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Ressources\ShantyLeaveHerJohnny.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Ressources\ShotgunKnees.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

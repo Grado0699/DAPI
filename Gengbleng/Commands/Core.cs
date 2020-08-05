@@ -85,7 +85,7 @@ namespace Gengbleng.Commands
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "500");
         }
 
-        [Command("random"), Aliases("r"), Description("Play")]
+        [Command("random"), Aliases("r"), Description("Plays a random soundfile.")]
         public async Task PlayRandomSoundFile(CommandContext ctx)
         {
             var random = new Random();
@@ -100,6 +100,15 @@ namespace Gengbleng.Commands
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(randomSoundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
+        [Command("shanty"), Aliases("sh"), Description("Plays a random shanty.")]
+        public async Task PlayShanty(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/ShantyLeaveHerJohnny.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
     }
 }
