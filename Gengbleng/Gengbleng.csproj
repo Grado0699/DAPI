@@ -419,6 +419,9 @@
     <None Update="Ressources\Ward3.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Ressources\Yooooooooooo.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -110,5 +110,14 @@ namespace Gengbleng.Commands
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
+
+        [Command("yooooooooooo"), Aliases("y"), Description("Plays yooooooooooo.")]
+        public async Task PlayYooooo(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/Yooooooooooo.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
     }
 }
