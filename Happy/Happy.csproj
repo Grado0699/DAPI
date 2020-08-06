@@ -7,8 +7,36 @@
 
   <ItemGroup>
     <Folder Include="Backend\" />
-    <Folder Include="Commands\" />
     <Folder Include="Ressources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\FFMPEG 64bit\ffmpeg.exe" Link="ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\FFMPEG 64bit\libopus.dll" Link="libopus.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\FFMPEG 64bit\libsodium.dll" Link="libsodium.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00711" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00711" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00711" />
+    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.0.0-nightly-00711" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Backend\Backend.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

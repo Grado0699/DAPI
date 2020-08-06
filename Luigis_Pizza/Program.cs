@@ -76,7 +76,7 @@ namespace Luigis_Pizza
             ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
             ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
 
-            Logger.Log("Command-Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Command - Handler initialized successfully.", LogLevel.Info);
 
             try
             {
@@ -98,7 +98,7 @@ namespace Luigis_Pizza
                 EnableIncoming = false
             });
 
-            Logger.Log("Voice-Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Info);
 
             Client.UseInteractivity(new InteractivityConfiguration
             {
