@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Happy
 {
-    class Program
+    internal class Program
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
@@ -49,11 +49,11 @@ namespace Happy
                 LogLevel = LogLevel.Debug
             });
 
-            var ClientEvents = new EventsClient(Client);
+            var clientEvents = new EventsClient(Client);
 
-            Client.Ready += ClientEvents.Client_Ready;
-            Client.GuildAvailable += ClientEvents.Client_GuildAvailable;
-            Client.ClientErrored += ClientEvents.Client_ClientError;
+            Client.Ready += clientEvents.Client_Ready;
+            Client.GuildAvailable += clientEvents.Client_GuildAvailable;
+            Client.ClientErrored += clientEvents.Client_ClientError;
 
             Logger = new Logger(Client);
             Logger.Log("Client initialized successfully.", LogLevel.Info);
@@ -69,8 +69,8 @@ namespace Happy
                 EnableDms = false
             });
 
-            ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
-            ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
+            ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
+            ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
             Logger.Log("Command - Handler initialized successfully.", LogLevel.Info);
 
@@ -83,7 +83,7 @@ namespace Happy
             {
                 Logger.Log($"An error occured while registering the commands.\n{exception}", LogLevel.Error);
 
-                Console.WriteLine($"Press any key to continue...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
 
                 return;
@@ -110,9 +110,11 @@ namespace Happy
             }
             catch (Exception exception)
             {
-                Logger.Log($"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
+                Logger.Log(
+                    $"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}",
+                    LogLevel.Error);
 
-                Console.WriteLine($"Press any key to continue...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
 
                 return;

@@ -83,16 +83,16 @@ namespace Toast_Stalin.Commands
         [Command("leave"), Aliases("l"), Description("Pokinut' kanal!")]
         public async Task LeaveChannel(CommandContext ctx)
         {
-            var VoiceNextExt = ctx.Client.GetVoiceNext();
-            var VoiceConnection = VoiceNextExt.GetConnection(ctx.Guild);
+            var voiceNextExt = ctx.Client.GetVoiceNext();
+            var voiceConnection = voiceNextExt.GetConnection(ctx.Guild);
 
-            if (VoiceConnection == null)
+            if (voiceConnection == null)
             {
-                await ctx.RespondAsync($"There is currently no voice connection up. Into Goulag with you!");
+                await ctx.RespondAsync("There is currently no voice connection up. Into Goulag with you!");
                 return;
             }
 
-            VoiceConnection.Disconnect();
+            voiceConnection.Disconnect();
         }
     }
 }
