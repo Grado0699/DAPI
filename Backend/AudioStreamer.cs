@@ -27,25 +27,22 @@ namespace Backend
         /// <returns></returns>
         public async Task PlaySoundFileAsync(string soundFile, DiscordChannel voiceChannel, string volume = "100")
         {
-            var VoiceNextExt = _client.GetVoiceNext();
+            var voiceNextExt = _client.GetVoiceNext();
 
-            var Guild = _client.Guilds.Values.Where(x => x.Id == ConfigLoader.GuildId).FirstOrDefault();
-            var VoiceConnection = VoiceNextExt.GetConnection(Guild);
+            var guild = _client.Guilds.Values.FirstOrDefault(x => x.Id == ConfigLoader.GuildId);
+            var voiceConnection = voiceNextExt.GetConnection(guild);
 
-            if (VoiceConnection != null)
+            if (voiceConnection != null)
             {
-                VoiceConnection.Disconnect();
+                voiceConnection.Disconnect();
                 _logger.Log("An old connection was still up, successfully closed old one.", LogLevel.Warning);
             }
 
-            if (VoiceConnection == null)
-            {
-                VoiceConnection = await VoiceNextExt.ConnectAsync(voiceChannel);
-            }
+            voiceConnection ??= await voiceNextExt.ConnectAsync(voiceChannel);
 
             _logger.Log("Connected to channel successfully.", LogLevel.Info);
 
-            var Streamer = new ProcessStartInfo
+            var streamer = new ProcessStartInfo
             {
                 FileName = "ffmpeg",
                 Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}",
@@ -55,20 +52,20 @@ namespace Backend
 
             _logger.Log("Initialized streamer successfully.", LogLevel.Debug);
 
-            await VoiceConnection.SendSpeakingAsync(true);
+            await voiceConnection.SendSpeakingAsync();
 
-            var ffmpeg = Process.Start(Streamer);
+            var ffmpeg = Process.Start(streamer);
             var ffout = ffmpeg.StandardOutput.BaseStream;
-            var txStream = VoiceConnection.GetTransmitStream();
+            var txStream = voiceConnection.GetTransmitStream();
 
             await ffout.CopyToAsync(txStream);
             await txStream.FlushAsync();
-            await VoiceConnection.WaitForPlaybackFinishAsync();
+            await voiceConnection.WaitForPlaybackFinishAsync();
 
             _logger.Log("Playback finished successfully.", LogLevel.Debug);
 
-            await VoiceConnection.SendSpeakingAsync(false);
-            VoiceConnection.Disconnect();
+            await voiceConnection.SendSpeakingAsync(false);
+            voiceConnection.Disconnect();
 
             _logger.Log("Disconnected from channel successfully.", LogLevel.Info);
         }
