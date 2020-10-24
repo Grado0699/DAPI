@@ -85,7 +85,7 @@ namespace Toast_Stalin
             {
                 Logger.Log($"An error occured while registering the commands.\n{exception}", LogLevel.Error);
 
-                Console.WriteLine($"Press any key to continue...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
 
                 return;
@@ -116,7 +116,7 @@ namespace Toast_Stalin
                     $"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}",
                     LogLevel.Error);
 
-                Console.WriteLine($"Press any key to continue...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
 
                 return;

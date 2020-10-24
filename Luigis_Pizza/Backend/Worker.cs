@@ -29,7 +29,7 @@ namespace Luigis_Pizza.Backend
         /// </summary>
         public async Task StartWorkerAsync()
         {
-            var guild = _client.Guilds.Values.Where(x => x.Id == ConfigLoader.GuildId).ToList().FirstOrDefault();
+            var guild = _client.Guilds.Values.FirstOrDefault(x => x.Id == ConfigLoader.GuildId);
 
             if (guild == null)
             {

@@ -88,7 +88,7 @@ namespace Toast_Stalin.Commands
 
             if (voiceConnection == null)
             {
-                await ctx.RespondAsync($"There is currently no voice connection up. Into Goulag with you!");
+                await ctx.RespondAsync("There is currently no voice connection up. Into Goulag with you!");
                 return;
             }
 
