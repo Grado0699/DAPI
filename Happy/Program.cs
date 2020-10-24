@@ -2,15 +2,17 @@
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.VoiceNext;
 using Happy.Commands;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Happy
 {
-    class Program
+    internal class Program
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
@@ -45,18 +47,17 @@ namespace Happy
                 Token = ConfigLoader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                UseInternalLogHandler = true,
-                LogLevel = LogLevel.Debug
+                MinimumLogLevel = LogLevel.Debug
             });
 
-            var ClientEvents = new EventsClient(Client);
+            var clientEvents = new EventsClient(Client);
 
-            Client.Ready += ClientEvents.Client_Ready;
-            Client.GuildAvailable += ClientEvents.Client_GuildAvailable;
-            Client.ClientErrored += ClientEvents.Client_ClientError;
+            Client.Ready += clientEvents.Client_Ready;
+            Client.GuildAvailable += clientEvents.Client_GuildAvailable;
+            Client.ClientErrored += clientEvents.Client_ClientError;
 
             Logger = new Logger(Client);
-            Logger.Log("Client initialized successfully.", LogLevel.Info);
+            Logger.Log("Client initialized successfully.", LogLevel.Information);
 
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -69,15 +70,15 @@ namespace Happy
                 EnableDms = false
             });
 
-            ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
-            ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
+            ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
+            ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
-            Logger.Log("Command - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Command - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 ComNextExt.RegisterCommands<Core>();
-                Logger.Log("Registered commands successfully.", LogLevel.Info);
+                Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {
@@ -94,23 +95,25 @@ namespace Happy
                 EnableIncoming = false
             });
 
-            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
 
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 await Client.ConnectAsync();
-                Logger.Log("Connected to the API successfully.", LogLevel.Info);
+                Logger.Log("Connected to the API successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {
-                Logger.Log($"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
+                Logger.Log(
+                    $"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}",
+                    LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();

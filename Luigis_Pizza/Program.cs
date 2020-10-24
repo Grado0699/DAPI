@@ -2,9 +2,11 @@
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.VoiceNext;
 using Luigis_Pizza.Backend;
 using Luigis_Pizza.Commands;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection;
@@ -49,8 +51,7 @@ namespace Luigis_Pizza
                 Token = ConfigLoader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                UseInternalLogHandler = true,
-                LogLevel = LogLevel.Debug
+                MinimumLogLevel = LogLevel.Debug
             });
 
             var clientEvents = new EventsClient(Client);
@@ -60,7 +61,7 @@ namespace Luigis_Pizza
             Client.ClientErrored += clientEvents.Client_ClientError;
 
             Logger = new Logger(Client);
-            Logger.Log("Client initialized successfully.", LogLevel.Info);
+            Logger.Log("Client initialized successfully.", LogLevel.Information);
 
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -76,12 +77,12 @@ namespace Luigis_Pizza
             ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
             ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
-            Logger.Log("Command - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Command - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 ComNextExt.RegisterCommands<Core>();
-                Logger.Log("Registered commands successfully.", LogLevel.Info);
+                Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {
@@ -98,19 +99,19 @@ namespace Luigis_Pizza
                 EnableIncoming = false
             });
 
-            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
 
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 await Client.ConnectAsync();
-                Logger.Log("Connected to the API successfully.", LogLevel.Info);
+                Logger.Log("Connected to the API successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {
@@ -127,7 +128,7 @@ namespace Luigis_Pizza
             ClientTimer = new Timer(Core.TimerSpan);
             ClientTimer.Elapsed += ClientTimer_Elapsed;
 
-            Logger.Log("Timer initialized successfully.", LogLevel.Info);
+            Logger.Log("Timer initialized successfully.", LogLevel.Information);
 
             ClientTimer.Start();
             await Task.Delay(-1);
@@ -135,15 +136,13 @@ namespace Luigis_Pizza
 
         private static async void ClientTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Logger.Log("Timer-Elapsed-Event executed.", LogLevel.Info);
+            Logger.Log("Timer-Elapsed-Event executed.", LogLevel.Information);
 
             ClientTimer.Stop();
 
             if (Core.EnableTimer)
             {
-                Logger.Log("Timer-Elapsed-Event executed.", LogLevel.Info);
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name,
-                    "Timer is enabled: going to start the worker.", DateTime.Now);
+                Logger.Log("Timer is enabled: going to start the worker.", LogLevel.Information);
 
                 try
                 {
@@ -169,7 +168,7 @@ namespace Luigis_Pizza
             }
             else
             {
-                Logger.Log("Timer is disabled.", LogLevel.Info);
+                Logger.Log("Timer is disabled.", LogLevel.Information);
             }
 
             ClientTimer.Interval = Core.TimerSpan;

@@ -9,6 +9,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
+using DSharpPlus.Interactivity.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Gengbleng
 {
@@ -48,8 +50,7 @@ namespace Gengbleng
                 Token = ConfigLoader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                UseInternalLogHandler = true,
-                LogLevel = LogLevel.Debug
+                MinimumLogLevel = LogLevel.Debug
             });
 
             var clientEvents = new EventsClient(Client);
@@ -59,7 +60,7 @@ namespace Gengbleng
             Client.ClientErrored += clientEvents.Client_ClientError;
 
             Logger = new Logger(Client);
-            Logger.Log("Client initialized successfully.", LogLevel.Info);
+            Logger.Log("Client initialized successfully.", LogLevel.Information);
 
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -75,12 +76,12 @@ namespace Gengbleng
             ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
             ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
-            Logger.Log("Command - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Command - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 ComNextExt.RegisterCommands<Core>();
-                Logger.Log("Registered commands successfully.", LogLevel.Info);
+                Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {
@@ -97,19 +98,19 @@ namespace Gengbleng
                 EnableIncoming = false
             });
 
-            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
 
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 await Client.ConnectAsync();
-                Logger.Log("Connected to the API successfully.", LogLevel.Info);
+                Logger.Log("Connected to the API successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {
@@ -126,7 +127,7 @@ namespace Gengbleng
             ClientTimer = new Timer(Core.TimerSpan);
             ClientTimer.Elapsed += ClientTimer_Elapsed;
 
-            Logger.Log("Timer initialized successfully.", LogLevel.Info);
+            Logger.Log("Timer initialized successfully.", LogLevel.Information);
 
             ClientTimer.Start();
             await Task.Delay(-1);
@@ -140,7 +141,7 @@ namespace Gengbleng
 
             if (Core.EnableTimer)
             {
-                Logger.Log("Timer is enabled: going to start the worker.", LogLevel.Info);
+                Logger.Log("Timer is enabled: going to start the worker.", LogLevel.Information);
 
                 try
                 {

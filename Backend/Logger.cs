@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Reflection;
 
@@ -18,7 +19,7 @@ namespace Backend
         /// </summary>
         public void Log(string logMessage, LogLevel logLevel)
         {
-            _discordClient.DebugLogger.LogMessage(logLevel, Assembly.GetExecutingAssembly().GetName().Name, logMessage,
+            _discordClient.Logger.Log(logLevel, Assembly.GetExecutingAssembly().GetName().Name, logMessage,
                 DateTime.Now);
         }
     }

@@ -2,7 +2,9 @@
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.VoiceNext;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -45,8 +47,7 @@ namespace Toast_Stalin
                 Token = ConfigLoader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                UseInternalLogHandler = true,
-                LogLevel = LogLevel.Debug
+                MinimumLogLevel = LogLevel.Debug
             });
 
             var clientEvents = new EventsClient(Client);
@@ -56,7 +57,7 @@ namespace Toast_Stalin
             Client.ClientErrored += clientEvents.Client_ClientError;
 
             Logger = new Logger(Client);
-            Logger.Log("Client initialized successfully.", LogLevel.Info);
+            Logger.Log("Client initialized successfully.", LogLevel.Information);
 
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -72,13 +73,13 @@ namespace Toast_Stalin
             ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
             ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
-            Logger.Log("Command - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Command - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 ComNextExt.RegisterCommands<Core>();
                 ComNextExt.RegisterCommands<Voice>();
-                Logger.Log("Registered commands successfully.", LogLevel.Info);
+                Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {
@@ -95,19 +96,19 @@ namespace Toast_Stalin
                 EnableIncoming = false
             });
 
-            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
 
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Info);
+            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 await Client.ConnectAsync();
-                Logger.Log("Connected to the API successfully.", LogLevel.Info);
+                Logger.Log("Connected to the API successfully.", LogLevel.Information);
             }
             catch (Exception exception)
             {

@@ -1,6 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.VoiceNext;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Backend
 
             voiceConnection ??= await voiceNextExt.ConnectAsync(voiceChannel);
 
-            _logger.Log("Connected to channel successfully.", LogLevel.Info);
+            _logger.Log("Connected to channel successfully.", LogLevel.Information);
 
             var streamer = new ProcessStartInfo
             {
@@ -63,7 +64,7 @@ namespace Backend
             await voiceConnection.SendSpeakingAsync(false);
             voiceConnection.Disconnect();
 
-            _logger.Log("Disconnected from channel successfully.", LogLevel.Info);
+            _logger.Log("Disconnected from channel successfully.", LogLevel.Information);
         }
     }
 }

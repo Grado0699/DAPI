@@ -1,20 +1,22 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using Backend;
+using Bunta.Commands;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.VoiceNext;
-using Bunta.Backend;
-using Bunta.Commands;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Bunta
 {
-    class Program
+    internal class Program
     {
-        private static DiscordClient Client { get; set; } = null;
-        private static CommandsNextExtension ComNextExt { get; set; } = null;
+        private static DiscordClient Client { get; set; }
+        private static CommandsNextExtension ComNextExt { get; set; }
+        private static Logger Logger { get; set; }
 
         private static void Main()
         {
@@ -25,37 +27,38 @@ namespace Bunta
         {
             try
             {
-                await ConfigLoader.LoadConfigurationFromFile();
+                await ConfigLoader.LoadConfigurationFromFileAsync();
             }
-            catch (FileNotFoundException FileNotFoundEx)
+            catch (FileNotFoundException fileNotFoundEx)
             {
-                Console.WriteLine($"{FileNotFoundEx}\n\nPress any key to continue...");
+                Console.WriteLine($"{fileNotFoundEx}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                Console.WriteLine($"{Ex}\n\nPress any key to continue...");
+                Console.WriteLine($"{ex}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
-
-            var ClientEvents = new EventsClient();
 
             Client = new DiscordClient(new DiscordConfiguration
             {
                 Token = ConfigLoader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                UseInternalLogHandler = true,
-                LogLevel = LogLevel.Debug
+                MinimumLogLevel = LogLevel.Debug
             });
 
-            Client.Ready += ClientEvents.Client_Ready;
-            Client.GuildAvailable += ClientEvents.Client_GuildAvailable;
-            Client.ClientErrored += ClientEvents.Client_ClientError;
+            var clientEvents = new EventsClient(Client);
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Client initialized successfully.", DateTime.Now);
+            Client.Ready += clientEvents.Client_Ready;
+            Client.GuildAvailable += clientEvents.Client_GuildAvailable;
+            Client.ClientErrored += clientEvents.Client_ClientError;
+
+            Logger = new Logger(Client);
+
+            Logger.Log("Client initialized successfully.", LogLevel.Information);
 
             ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -68,23 +71,23 @@ namespace Bunta
                 EnableDms = false
             });
 
-            ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
-            ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
+            ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
+            ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Command-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Command-Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 ComNextExt.RegisterCommands<Core>();
                 ComNextExt.RegisterCommands<Voice>();
 
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Registered commands successfully.", DateTime.Now);
+                Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
             catch
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, "An error occured while registering the commands.", DateTime.Now);
+                Logger.Log("An error occured while registering the commands.", LogLevel.Error);
 
-                Console.WriteLine($"Press any key to continue...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
 
                 return;
@@ -95,23 +98,24 @@ namespace Bunta
                 EnableIncoming = false
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Voice-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Voice-Handler initialized successfully.", LogLevel.Information);
 
             Client.UseInteractivity(new InteractivityConfiguration
             {
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Interactivity-Handler initialized successfully.", DateTime.Now);
+            Logger.Log("Interactivity-Handler initialized successfully.", LogLevel.Information);
 
             try
             {
                 await Client.ConnectAsync();
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Connected to the API successfully.", DateTime.Now);
+                Logger.Log("Connected to the API successfully.", LogLevel.Information);
             }
             catch
             {
-                Client.DebugLogger.LogMessage(LogLevel.Error, Assembly.GetExecutingAssembly().GetName().Name, "An error occured while connecting to the API. Maybe the wrong token was provided.", DateTime.Now);
+                Logger.Log("An error occured while connecting to the API. Maybe the wrong token was provided.",
+                    LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();

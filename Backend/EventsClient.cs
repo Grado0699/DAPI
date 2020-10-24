@@ -1,6 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace Backend
@@ -14,39 +15,40 @@ namespace Backend
             _logger = new Logger(discordClient);
         }
 
-        public async Task Client_Ready(ReadyEventArgs e)
+        public async Task Client_Ready(DiscordClient sender, ReadyEventArgs readyEventArgs)
         {
-            if (e is null)
-            {
-                throw new System.ArgumentNullException(nameof(e));
-            }
-
-            _logger.Log("Client is ready to proceed events.", LogLevel.Info);
+            _logger.Log("Client is ready to proceed events.", LogLevel.Information);
             await Task.CompletedTask;
         }
 
-        public async Task Client_GuildAvailable(GuildCreateEventArgs e)
+        public async Task Client_GuildAvailable(DiscordClient sender, GuildCreateEventArgs guildCreateEventArgs)
         {
-            _logger.Log($"Guild available: {e.Guild.Name}", LogLevel.Info);
+            _logger.Log($"Guild available: {guildCreateEventArgs.Guild.Name}", LogLevel.Information);
             await Task.CompletedTask;
         }
 
-        public async Task Client_ClientError(ClientErrorEventArgs e)
-        {
-            _logger.Log($"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", LogLevel.Error);
-            await Task.CompletedTask;
-        }
-
-        public async Task Commands_CommandExecuted(CommandExecutionEventArgs e)
-        {
-            _logger.Log($"{e.Context.User.Username} successfully executed '{e.Command.QualifiedName}'", LogLevel.Info);
-            await Task.CompletedTask;
-        }
-
-        public async Task Commands_CommandErrored(CommandErrorEventArgs e)
+        public async Task Client_ClientError(DiscordClient sender, ClientErrorEventArgs clientErrorEventArgs)
         {
             _logger.Log(
-                $"{e.Context.User.Username} tried executing '{e.Command?.QualifiedName ?? "<unknown command>"}' but it errored: {e.Exception.GetType()}: {e.Exception.Message ?? "<no message>"}",
+                $"Exception occured: {clientErrorEventArgs.Exception.GetType()}: {clientErrorEventArgs.Exception.Message}",
+                LogLevel.Error);
+            await Task.CompletedTask;
+        }
+
+        public async Task Commands_CommandExecuted(CommandsNextExtension commandsNextExtension,
+            CommandExecutionEventArgs commandExecutionEventArgs)
+        {
+            _logger.Log(
+                $"{commandExecutionEventArgs.Context.User.Username} successfully executed '{commandExecutionEventArgs.Command.QualifiedName}'",
+                LogLevel.Information);
+            await Task.CompletedTask;
+        }
+
+        public async Task Commands_CommandErrored(CommandsNextExtension commandsNextExtension,
+            CommandErrorEventArgs commandErrorEventArgs)
+        {
+            _logger.Log(
+                $"{commandErrorEventArgs.Context.User.Username} tried executing '{commandErrorEventArgs.Command?.QualifiedName ?? "<unknown command>"}' but it errored: {commandErrorEventArgs.Exception.GetType()}: {commandErrorEventArgs.Exception.Message}",
                 LogLevel.Error);
             await Task.CompletedTask;
         }

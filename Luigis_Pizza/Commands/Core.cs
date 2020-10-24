@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 using System;
 using System.Threading.Tasks;
 
