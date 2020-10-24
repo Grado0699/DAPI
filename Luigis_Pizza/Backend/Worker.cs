@@ -26,32 +26,33 @@ namespace Luigis_Pizza.Backend
         /// <summary>
         ///     Connects to the voicechannel of a random member and plays a the pizza soundfile.
         /// </summary>
-        /// <param name="Client"></param>
-        /// <returns></returns>
         public async Task StartWorkerAsync()
         {
-            var Guild = _client.Guilds.Values.Where(x => x.Id == ConfigLoader.GuildId).ToList().FirstOrDefault();
+            var guild = _client.Guilds.Values.Where(x => x.Id == ConfigLoader.GuildId).ToList().FirstOrDefault();
 
-            if (Guild == null)
+            if (guild == null)
             {
-                throw new ArgumentNullException("The specified Guild was not found. Check the 'Guild' parameter in the configuration file.");
+                throw new ArgumentNullException(
+                    "The specified Guild was not found. Check the 'Guild' parameter in the configuration file.");
             }
 
-            var MembersWithVoiceStateUp = Guild.Members.Values.Where(x => x.VoiceState != null && x.VoiceState.Channel != null && x.VoiceState.Channel.GuildId == Guild.Id && !x.IsBot).ToList();
+            var membersWithVoiceStateUp = guild.Members.Values.Where(x =>
+                x.VoiceState != null && x.VoiceState.Channel != null && x.VoiceState.Channel.GuildId == guild.Id &&
+                !x.IsBot).ToList();
 
-            if (MembersWithVoiceStateUp == null)
+            if (membersWithVoiceStateUp == null)
             {
                 throw new ArgumentNullException("List of users with voicestate 'up' is null.");
             }
 
-            if (MembersWithVoiceStateUp.Count == 0)
+            if (membersWithVoiceStateUp.Count == 0)
             {
                 _logger.Log("There are currently no users with voicestate 'up'.", LogLevel.Warning);
                 return;
             }
 
-            var RandomNumber = new Random();
-            var RandomMember = MembersWithVoiceStateUp[RandomNumber.Next(0, MembersWithVoiceStateUp.Count - 1)];
+            var randomNumber = new Random();
+            var randomMember = membersWithVoiceStateUp[randomNumber.Next(0, membersWithVoiceStateUp.Count - 1)];
 
             _logger.Log("Retrieved a random member successfully.", LogLevel.Debug);
 
@@ -62,7 +63,7 @@ namespace Luigis_Pizza.Backend
 
             try
             {
-                await _audioStreamer.PlaySoundFileAsync(SoundFile, RandomMember.VoiceState.Channel, "10");
+                await _audioStreamer.PlaySoundFileAsync(SoundFile, randomMember.VoiceState.Channel, "10");
             }
             catch (FileNotFoundException fileNotFoundException)
             {

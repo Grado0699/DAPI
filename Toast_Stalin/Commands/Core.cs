@@ -14,18 +14,18 @@ namespace Toast_Stalin.Commands
             await ctx.RespondAsync($"Privet {ctx.Member.Mention}");
         }
 
-        [Command("goulag"), Aliases("g"), Description("Otpravit' zlo!")]
+        [Command("gulag"), Aliases("g"), Description("Otpravit' zlo!")]
         public async Task Goulag(CommandContext ctx, DiscordMember userToGoulag)
         {
             if (userToGoulag.IsBot)
             {
-                await ctx.RespondAsync("You can't goulag me. Into Goulag with you!");
+                await ctx.RespondAsync("You can't gulag me. Into Gulag with you!");
                 userToGoulag = ctx.Member;
             }
 
             if (userToGoulag.VoiceState == null)
             {
-                await ctx.RespondAsync("This user does not has an active voicestate. Into Goulag with you!");
+                await ctx.RespondAsync("This user does not has an active voicestate. Into Gulag with you!");
                 userToGoulag = ctx.Member;
             }
 

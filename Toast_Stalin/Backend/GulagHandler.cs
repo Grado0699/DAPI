@@ -45,7 +45,7 @@ namespace Toast_Stalin.Backend
             StatusTimer.Start();
             GulagTimer.Start();
 
-            await _commandContext.RespondAsync($"You are now goulaged {_discordMember.Mention}!");
+            await _commandContext.RespondAsync($"You are now gulaged {_discordMember.Mention}!");
         }
 
         private async void StatusTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -66,7 +66,7 @@ namespace Toast_Stalin.Backend
             StatusTimer.Stop();
             GulagTimer.Stop();
 
-            await _commandContext.RespondAsync($"You are not goulaged anymore {_discordMember.Mention}!");
+            await _commandContext.RespondAsync($"You are not gulaged anymore {_discordMember.Mention}!");
         }
     }
 }

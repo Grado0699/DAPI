@@ -16,11 +16,10 @@ namespace Backend
         /// <summary>
         ///     Logs a message.
         /// </summary>
-        /// <param name="logMessage"></param>
-        /// <param name="logLevel"></param>
         public void Log(string logMessage, LogLevel logLevel)
         {
-            _discordClient.DebugLogger.LogMessage(logLevel, Assembly.GetExecutingAssembly().GetName().Name, logMessage, DateTime.Now);
+            _discordClient.DebugLogger.LogMessage(logLevel, Assembly.GetExecutingAssembly().GetName().Name, logMessage,
+                DateTime.Now);
         }
     }
 }

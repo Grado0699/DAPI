@@ -45,7 +45,9 @@ namespace Backend
 
         public async Task Commands_CommandErrored(CommandErrorEventArgs e)
         {
-            _logger.Log($"{e.Context.User.Username} tried executing '{e.Command?.QualifiedName ?? "<unknown command>"}' but it errored: {e.Exception.GetType()}: {e.Exception.Message ?? "<no message>"}", LogLevel.Error);
+            _logger.Log(
+                $"{e.Context.User.Username} tried executing '{e.Command?.QualifiedName ?? "<unknown command>"}' but it errored: {e.Exception.GetType()}: {e.Exception.Message ?? "<no message>"}",
+                LogLevel.Error);
             await Task.CompletedTask;
         }
     }

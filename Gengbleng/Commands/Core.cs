@@ -11,12 +11,12 @@ namespace Gengbleng.Commands
     public class Core : BaseCommandModule
     {
         public static double TimerSpan = 1800000;
-        public static bool EnableTimer = false;
+        public static bool EnableTimer;
 
         [Command("settimer"), Aliases("t"), Description("Enable/disable the timer.")]
         public async Task SetTimer(CommandContext ctx)
         {
-            var InterActExt = ctx.Client.GetInteractivity();
+            var interActExt = ctx.Client.GetInteractivity();
 
             if (EnableTimer)
             {
@@ -27,34 +27,35 @@ namespace Gengbleng.Commands
                 await ctx.RespondAsync($"Current status of timer is `{EnableTimer}`. Activate timer? [y/n]");
             }
 
-            var Message = await InterActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
+            var message =
+                await interActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
 
-            if (Message.Result.Content.ToLower().Contains("y"))
+            if (message.Result.Content.ToLower().Contains("y"))
             {
                 EnableTimer = !EnableTimer;
                 await ctx.RespondAsync($"Timer set to `{EnableTimer}`.");
             }
-            else if (Message.Result.Content.ToLower().Contains("n"))
+            else if (message.Result.Content.ToLower().Contains("n"))
             {
                 await ctx.RespondAsync("Do nothing.");
             }
             else
             {
                 await ctx.RespondAsync("Invalid input.");
-                return;
             }
         }
 
         [Command("interval"), Aliases("i"), Description("Set new timer interval.")]
         public async Task SetInterval(CommandContext ctx)
         {
-            var InterActExt = ctx.Client.GetInteractivity();
+            var interActExt = ctx.Client.GetInteractivity();
 
             await ctx.RespondAsync($"Current interval is `{TimerSpan / 1000d}`. Enter new interval in `x seconds`:");
 
-            var Message = await InterActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
+            var message =
+                await interActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
 
-            if (double.TryParse(Message.Result.Content, out TimerSpan))
+            if (double.TryParse(message.Result.Content, out TimerSpan))
             {
                 TimerSpan *= 1000d;
 

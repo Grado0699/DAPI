@@ -13,7 +13,7 @@ using System.Timers;
 
 namespace Luigis_Pizza
 {
-    class Program
+    internal class Program
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
@@ -53,11 +53,11 @@ namespace Luigis_Pizza
                 LogLevel = LogLevel.Debug
             });
 
-            var ClientEvents = new EventsClient(Client);
+            var clientEvents = new EventsClient(Client);
 
-            Client.Ready += ClientEvents.Client_Ready;
-            Client.GuildAvailable += ClientEvents.Client_GuildAvailable;
-            Client.ClientErrored += ClientEvents.Client_ClientError;
+            Client.Ready += clientEvents.Client_Ready;
+            Client.GuildAvailable += clientEvents.Client_GuildAvailable;
+            Client.ClientErrored += clientEvents.Client_ClientError;
 
             Logger = new Logger(Client);
             Logger.Log("Client initialized successfully.", LogLevel.Info);
@@ -73,8 +73,8 @@ namespace Luigis_Pizza
                 EnableDms = false
             });
 
-            ComNextExt.CommandExecuted += ClientEvents.Commands_CommandExecuted;
-            ComNextExt.CommandErrored += ClientEvents.Commands_CommandErrored;
+            ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
+            ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
             Logger.Log("Command - Handler initialized successfully.", LogLevel.Info);
 
@@ -114,7 +114,9 @@ namespace Luigis_Pizza
             }
             catch (Exception exception)
             {
-                Logger.Log($"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
+                Logger.Log(
+                    $"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}",
+                    LogLevel.Error);
 
                 Console.WriteLine($"Press any key to continue...");
                 Console.ReadKey();
@@ -140,12 +142,13 @@ namespace Luigis_Pizza
             if (Core.EnableTimer)
             {
                 Logger.Log("Timer-Elapsed-Event executed.", LogLevel.Info);
-                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name, "Timer is enabled: going to start the worker.", DateTime.Now);
+                Client.DebugLogger.LogMessage(LogLevel.Info, Assembly.GetExecutingAssembly().GetName().Name,
+                    "Timer is enabled: going to start the worker.", DateTime.Now);
 
                 try
                 {
-                    var ClientWorker = new Worker(Client);
-                    await ClientWorker.StartWorkerAsync();
+                    var clientWorker = new Worker(Client);
+                    await clientWorker.StartWorkerAsync();
                 }
                 catch (ArgumentNullException argumentNullException)
                 {

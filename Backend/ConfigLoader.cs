@@ -16,7 +16,6 @@ namespace Backend
         /// <summary>
         ///     Loads all properties of the configuration file.
         /// </summary>
-        /// <returns></returns>
         public static async Task LoadConfigurationFromFileAsync()
         {
             if (!File.Exists(ConfigFileName))
@@ -24,29 +23,25 @@ namespace Backend
                 throw new FileNotFoundException($"The configuration file '{ConfigFileName}' is missing.");
             }
 
-            using var StreamConfig = File.OpenRead(ConfigFileName);
-            using var StreamReaderConfig = new StreamReader(StreamConfig, new UTF8Encoding(false));
-            var ReadConfig = await StreamReaderConfig.ReadToEndAsync();
-            ConfigJson Configuration = JsonConvert.DeserializeObject<ConfigJson>(ReadConfig);
+            await using var streamConfig = File.OpenRead(ConfigFileName);
+            using var streamReaderConfig = new StreamReader(streamConfig, new UTF8Encoding(false));
+            var readConfig = await streamReaderConfig.ReadToEndAsync();
+            var configuration = JsonConvert.DeserializeObject<ConfigJson>(readConfig);
 
-            CommandPrefix = Configuration.CommandPrefix;
-            GuildId = Configuration.GuildId;
-            Token = Configuration.Token;
+            CommandPrefix = configuration.CommandPrefix;
+            GuildId = configuration.GuildId;
+            Token = configuration.Token;
         }
 
         private struct ConfigJson
         {
-            [JsonProperty("Prefix")]
-            public string[] CommandPrefix { get; private set; }
+            [JsonProperty("Prefix")] public string[] CommandPrefix { get; private set; }
 
-            [JsonProperty("DefaultChannel")]
-            public ulong DefaultChannelId { get; private set; }
+            [JsonProperty("DefaultChannel")] public ulong DefaultChannelId { get; private set; }
 
-            [JsonProperty("Guild")]
-            public ulong GuildId { get; private set; }
+            [JsonProperty("Guild")] public ulong GuildId { get; private set; }
 
-            [JsonProperty("Token")]
-            public string Token { get; private set; }
+            [JsonProperty("Token")] public string Token { get; private set; }
         }
     }
 }
