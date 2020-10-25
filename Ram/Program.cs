@@ -5,6 +5,7 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.VoiceNext;
 using Microsoft.Extensions.Logging;
+using Ram.Commands;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -76,7 +77,7 @@ namespace Ram
 
             try
             {
-                //ComNextExt.RegisterCommands<Core>();
+                ComNextExt.RegisterCommands<Core>();
                 Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
             catch (Exception exception)
