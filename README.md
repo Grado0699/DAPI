@@ -5,15 +5,16 @@ This repository is a collection of some Discord bots written in C#.
 ## Used packages
 
 * .NET Core 3.1
-* [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus/blob/master/README.md)
+* [DSharpPlus (nightly)](https://github.com/DSharpPlus/DSharpPlus/blob/master/README.md)
 
 ## Bots
 
 * [Luigis Pizza](https://github.com/Grado0699/DAPI/tree/master/Luigis_Pizza)
 * [Toast Stalin](https://github.com/Grado0699/DAPI/tree/master/Toast_Stalin)
+* [Ram](https://github.com/Grado0699/DAPI/tree/master/Ram)
+* [Rem](https://github.com/Grado0699/DAPI/tree/master/Rem)
+* Happy (in progress)
 * Bunta (in progress)
-* Rem (in progress)
-* Ram (in progress)
 
 ## Installation
 
@@ -21,20 +22,28 @@ This repository is a collection of some Discord bots written in C#.
 
 ### Windows
 
+* Requires the .NET Core 3.1 runtime to be installed.
 * Just do a release build and your good to go.
 * ffmpeg.exe, opus.dll and sodium.dll (which are used for voice) are included in the build.
 
 ### Linux
 
-* You need to install the following packages (Debian):
+* Requires the .NET Core 3.1 runtime to be installed.
+* You need to install the following packages (Debian) for a working voice setup:
 
-`sudo apt-get install libopus0 libsodium18 libopus-dev libsodium-dev`
+        sudo apt-get install libopus0 libsodium18 libopus-dev libsodium-dev
 
-Depending on your distro and version, you might need to install different packages.
-You do not need ffmpeg.exe, opus.dll and sodium.dll. Delete them to save some diskspace.
-
+* Depending on your distribution and version, you might need to install different packages. You do not need ffmpeg.exe, opus.dll and sodium.dll. Delete them to save some diskspace.
+* Do a release build.
 * Execute the `<bot>.dll` in the release folder by running the command:
 
-`dotnet <bot>.dll`
+        dotnet <bot>.dll
 
 * Have fun!
+
+#### Service
+
+With Linux it is also possible to register the Bot as a service. To do that following these steps:
+
+* Create a new `<bot>.serivce` in the directory `/lib/system/systemd/`.
+* TODO 
