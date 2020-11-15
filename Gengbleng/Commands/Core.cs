@@ -121,7 +121,7 @@ namespace Gengbleng.Commands
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("shit"), Aliases("s"), Description("Plays Shit Boat from Alestorm.")]
+        [Command("shit"), Aliases("arrr"), Description("Plays Shit Boat from Alestorm.")]
         public async Task ShitBoat(CommandContext ctx)
         {
             const string soundFile = "Ressources/ShitBoat.ogg";
