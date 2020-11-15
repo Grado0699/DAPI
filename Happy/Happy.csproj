@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,21 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Backend\" />
-    <Folder Include="Ressources\" />
+    <None Include="..\VoiceSetup\ffmpeg.exe" Link="ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\VoiceSetup\libopus.dll" Link="libopus.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\VoiceSetup\libsodium.dll" Link="libsodium.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\VoiceSetup\ffmpeg.exe" Link="ffmpeg.exe" />
-    <None Include="..\VoiceSetup\libopus.dll" Link="libopus.dll" />
-    <None Include="..\VoiceSetup\libsodium.dll" Link="libsodium.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DSharpPlus" Version="4.0.0-nightly-00744" />
-    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-nightly-00744" />
-    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-nightly-00744" />
-    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.0.0-nightly-00744" />
+    <PackageReference Include="DSharpPlus" Version="4.0.0-rc1" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.0-rc1" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.0-rc1" />
+    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.0.0-rc1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,9 @@
 
   <ItemGroup>
     <None Update="Config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Ressources\happy_aye_sir.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -146,8 +146,8 @@ namespace Bunta.Commands
             await VoiceConnection.SendSpeakingAsync(true);
 
             var ffmpeg = Process.Start(StreamerProcess);
-            var ffout = ffmpeg.StandardOutput.BaseStream;
-            var txStream = VoiceConnection.GetTransmitStream();
+            var ffout = ffmpeg?.StandardOutput.BaseStream;
+            var txStream = VoiceConnection.GetTransmitSink();
 
             await ffout.CopyToAsync(txStream);
             await txStream.FlushAsync();

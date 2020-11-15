@@ -52,8 +52,8 @@ namespace Backend
             await voiceConnection.SendSpeakingAsync();
 
             var ffmpeg = Process.Start(streamer);
-            var ffout = ffmpeg.StandardOutput.BaseStream;
-            var txStream = voiceConnection.GetTransmitStream();
+            var ffout = ffmpeg?.StandardOutput.BaseStream;
+            var txStream = voiceConnection.GetTransmitSink();
 
             await ffout.CopyToAsync(txStream);
             await txStream.FlushAsync();
