@@ -5,6 +5,7 @@ using DSharpPlus.Interactivity.Extensions;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using DSharpPlus.VoiceNext;
 
 namespace Gengbleng.Commands
 {
@@ -137,6 +138,15 @@ namespace Gengbleng.Commands
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
+        [Command("leave"), Aliases("l"), Description("Leaves the current voice channel.")]
+        public async Task LeaveChannel(CommandContext ctx)
+        {
+            var voiceNextExt = ctx.Client.GetVoiceNext();
+            var voiceConnection = voiceNextExt.GetConnection(ctx.Guild);
+
+            voiceConnection?.Disconnect();
         }
     }
 }
