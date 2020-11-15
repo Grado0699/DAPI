@@ -120,5 +120,23 @@ namespace Gengbleng.Commands
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
+
+        [Command("shit"), Aliases("s"), Description("Plays Shit Boat from Alestorm.")]
+        public async Task ShitBoat(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/ShitBoat.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
+
+        [Command("fuck"), Aliases("f"), Description("Plays Fucked With An Anchor from Alestorm.")]
+        public async Task FuckedWithAnAnchor(CommandContext ctx)
+        {
+            const string soundFile = "Ressources/FuckedWithAnAnchor.ogg";
+
+            var audioStreamer = new AudioStreamer(ctx.Client);
+            await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
+        }
     }
 }
