@@ -35,6 +35,9 @@
     <None Update="opus.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Ressources\Alestorm.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Ressources\Attack1.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
