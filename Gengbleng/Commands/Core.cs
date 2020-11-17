@@ -140,8 +140,8 @@ namespace Gengbleng.Commands
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-        [Command("pirate"), Aliases("p"), Description("Plays Alestorm from Alestorm.")]
-        public async Task Alestorm(CommandContext ctx)
+        [Command("whatdoesapirateneed"), Aliases(""), Description("Tells you want a pirate needs.")]
+        public async Task WhatDoesAPiratNeed(CommandContext ctx)
         {
             const string soundFile = "Ressources/Alestorm.ogg";
 
