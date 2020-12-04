@@ -10,6 +10,7 @@ namespace Backend
         private const string ConfigFileName = "Config.json";
         public static string[] CommandPrefix { get; set; }
         public static ulong DefaultChannelId { get; set; }
+        public static ulong GulagChannelId { get; set; }
         public static ulong GuildId { get; set; }
         public static string Token { get; set; }
 
@@ -29,6 +30,8 @@ namespace Backend
             var configuration = JsonConvert.DeserializeObject<ConfigJson>(readConfig);
 
             CommandPrefix = configuration.CommandPrefix;
+            DefaultChannelId = configuration.DefaultChannelId;
+            GulagChannelId = configuration.GulagChannelId;
             GuildId = configuration.GuildId;
             Token = configuration.Token;
         }
@@ -38,6 +41,7 @@ namespace Backend
             [JsonProperty("Prefix")] public string[] CommandPrefix { get; private set; }
 
             [JsonProperty("DefaultChannel")] public ulong DefaultChannelId { get; private set; }
+            [JsonProperty("GoulagChannel")] public ulong GulagChannelId { get; private set; }
 
             [JsonProperty("Guild")] public ulong GuildId { get; private set; }
 

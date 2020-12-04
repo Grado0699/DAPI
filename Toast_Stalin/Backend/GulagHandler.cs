@@ -22,7 +22,7 @@ namespace Toast_Stalin.Backend
         {
             _commandContext = commandContext;
             _discordMember = discordMember;
-            _discordChannel = commandContext.Guild.GetChannel(ConfigLoader.DefaultChannelId);
+            _discordChannel = commandContext.Guild.GetChannel(ConfigLoader.GulagChannelId);
 
             StatusTimer = new Timer(StatusTimespan)
             {
