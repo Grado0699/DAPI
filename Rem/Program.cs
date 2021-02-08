@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using ILogger = Backend.ILogger;
 
 namespace Rem
 {
@@ -15,7 +16,7 @@ namespace Rem
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
-        private static Logger Logger { get; set; }
+        private static ILogger Logger { get; set; }
 
         private static void Main()
         {
@@ -49,7 +50,7 @@ namespace Rem
                 MinimumLogLevel = LogLevel.Debug
             });
 
-            var clientEvents = new EventsClient(Client);
+            IEventsClient clientEvents = new EventsClient(Client);
 
             Client.Ready += clientEvents.Client_Ready;
             Client.GuildAvailable += clientEvents.Client_GuildAvailable;

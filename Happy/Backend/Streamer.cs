@@ -5,13 +5,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using ILogger = Backend.ILogger;
 
 namespace Happy.Backend
 {
     public class Streamer
     {
-        private readonly AudioStreamer _audioStreamer;
-        private readonly Logger _logger;
+        private readonly IAudioStreamer _audioStreamer;
+        private readonly ILogger _logger;
 
         public Streamer(DiscordClient client)
         {
@@ -20,15 +21,15 @@ namespace Happy.Backend
         }
 
         /// <summary>
-        ///     Connects to the specified voice channel and plays the default soundfile.
+        ///     Connects to the specified voice channel and plays the default sound-file.
         /// </summary>
         public async Task PlayDefaultSoundFile(DiscordChannel discordChannel)
         {
-            const string soundFile = "Ressources/happy_aye_sir.ogg";
+            const string soundFile = "Resources/happy_aye_sir.ogg";
 
             if (!File.Exists(soundFile))
             {
-                throw new FileNotFoundException("Soundfile could not be found.");
+                throw new FileNotFoundException("Sound-file could not be found.");
             }
 
             try

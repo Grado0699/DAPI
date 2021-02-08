@@ -1,10 +1,6 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using DSharpPlus;
-using DSharpPlus.CommandsNext;
+﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Interactivity;
+using System.Threading.Tasks;
 
 namespace Bunta.Commands
 {

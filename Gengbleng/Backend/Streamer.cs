@@ -5,14 +5,15 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ILogger = Backend.ILogger;
 
 namespace Gengbleng.Backend
 {
     public class Streamer
     {
-        private readonly AudioStreamer _audioStreamer;
+        private readonly IAudioStreamer _audioStreamer;
         private readonly DiscordClient _client;
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
 
         public Streamer(DiscordClient client)
         {
@@ -22,7 +23,7 @@ namespace Gengbleng.Backend
         }
 
         /// <summary>
-        ///     Connects to the voicechannel of a random member and plays a random soundfile.
+        ///     Connects to the voice-channel of a random member and plays a random sound-file.
         /// </summary>
         public async Task PlayRandomSoundFile()
         {
@@ -31,6 +32,7 @@ namespace Gengbleng.Backend
             if (guild == null)
             {
                 throw new ArgumentNullException(
+                    $"{nameof(guild)}",
                     "The specified Guild was not found. Check the 'Guild' parameter in the configuration file.");
             }
 
@@ -40,12 +42,13 @@ namespace Gengbleng.Backend
 
             if (membersWithVoiceStateUp == null)
             {
-                throw new ArgumentNullException("List of users with voicestate 'up' is null.");
+                throw new ArgumentNullException($"{nameof(membersWithVoiceStateUp)}",
+                    "List of users with voice-state 'up' is null.");
             }
 
             if (membersWithVoiceStateUp.Count == 0)
             {
-                _logger.Log("There are currently no users with voicestate 'up'.", LogLevel.Warning);
+                _logger.Log("There are currently no users with voice-state 'up'.", LogLevel.Warning);
                 return;
             }
 
@@ -54,12 +57,12 @@ namespace Gengbleng.Backend
 
             _logger.Log("Retrieved a random member successfully.", LogLevel.Debug);
 
-            var soundFiles = Directory.GetFiles(@"Ressources/", "*.ogg");
+            var soundFiles = Directory.GetFiles(@"Resources/", "*.ogg");
             var soundFile = soundFiles[randomNumber.Next(0, soundFiles.Length - 1)];
 
             if (!File.Exists(soundFile))
             {
-                throw new FileNotFoundException("Soundfile could not be found.");
+                throw new FileNotFoundException("Sound-file could not be found.");
             }
 
             try

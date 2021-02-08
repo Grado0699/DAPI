@@ -72,18 +72,18 @@ namespace Gengbleng.Commands
         [Command("barrel"), Aliases("b"), Description("BARREL!")]
         public async Task Barrel(CommandContext ctx)
         {
-            const string soundFile = "Ressources/E1.ogg";
+            const string soundFile = "Resources/E1.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("shotgunknees"), Aliases("s"), Description("Plays the 'Shotgun-Knees' sound.")]
         public async Task ShotgunKnees(CommandContext ctx)
         {
-            const string soundFile = "Ressources/ShotgunKnees.ogg";
+            const string soundFile = "Resources/ShotgunKnees.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "500");
         }
 
@@ -92,7 +92,7 @@ namespace Gengbleng.Commands
         {
             var random = new Random();
 
-            var allSoundFiles = Directory.GetFiles(@"Ressources/", "*.ogg");
+            var allSoundFiles = Directory.GetFiles(@"Resources/", "*.ogg");
             var randomSoundFile = allSoundFiles[random.Next(0, allSoundFiles.Length - 1)];
 
             if (!File.Exists(randomSoundFile))
@@ -100,14 +100,14 @@ namespace Gengbleng.Commands
                 throw new FileNotFoundException("Either image or soundfile is missing.");
             }
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(randomSoundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("shanty"), Aliases("sh"), Description("Plays a random shanty.")]
         public async Task PlayShanty(CommandContext ctx)
         {
-            const string soundFile = "Ressources/ShantyLeaveHerJohnny.ogg";
+            const string soundFile = "Resources/ShantyLeaveHerJohnny.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
@@ -116,16 +116,16 @@ namespace Gengbleng.Commands
         [Command("yooooooooooo"), Aliases("y"), Description("Plays yooooooooooo.")]
         public async Task PlayYooooo(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Yooooooooooo.ogg";
+            const string soundFile = "Resources/Yooooooooooo.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("shit"), Aliases("arrr"), Description("Plays Shit Boat from Alestorm.")]
         public async Task ShitBoat(CommandContext ctx)
         {
-            const string soundFile = "Ressources/ShitBoat.ogg";
+            const string soundFile = "Resources/ShitBoat.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
@@ -134,16 +134,16 @@ namespace Gengbleng.Commands
         [Command("fuck"), Aliases("f"), Description("Plays Fucked With An Anchor from Alestorm.")]
         public async Task FuckedWithAnAnchor(CommandContext ctx)
         {
-            const string soundFile = "Ressources/FuckedWithAnAnchor.ogg";
+            const string soundFile = "Resources/FuckedWithAnAnchor.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("whatdoesapirateneed"), Aliases(""), Description("Tells you want a pirate needs.")]
         public async Task WhatDoesAPiratNeed(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Alestorm.ogg";
+            const string soundFile = "Resources/Alestorm.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");

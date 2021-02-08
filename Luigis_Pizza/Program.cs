@@ -9,9 +9,9 @@ using Luigis_Pizza.Commands;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
+using ILogger = Backend.ILogger;
 
 namespace Luigis_Pizza
 {
@@ -20,7 +20,7 @@ namespace Luigis_Pizza
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
         private static Timer ClientTimer { get; set; }
-        private static Logger Logger { get; set; }
+        private static ILogger Logger { get; set; }
 
         private static void Main()
         {
@@ -54,7 +54,7 @@ namespace Luigis_Pizza
                 MinimumLogLevel = LogLevel.Debug
             });
 
-            var clientEvents = new EventsClient(Client);
+            IEventsClient clientEvents = new EventsClient(Client);
 
             Client.Ready += clientEvents.Client_Ready;
             Client.GuildAvailable += clientEvents.Client_GuildAvailable;

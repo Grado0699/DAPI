@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Backend
 {
-    public class EventsClient
+    public class EventsClient : IEventsClient
     {
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
 
         public EventsClient(DiscordClient discordClient)
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Backend
 {
-    public class AudioStreamer
+    public class AudioStreamer : IAudioStreamer
     {
         private readonly DiscordClient _client;
         private readonly Logger _logger;
@@ -20,7 +20,7 @@ namespace Backend
         }
 
         /// <summary>
-        ///     Connects to the a channel and plays a soundfile.
+        ///     Connects to the a channel and plays a sound-file.
         /// </summary>
         public async Task PlaySoundFileAsync(string soundFile, DiscordChannel voiceChannel, string volume = "100")
         {

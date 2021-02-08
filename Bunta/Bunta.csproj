@@ -35,15 +35,19 @@
     <None Update="opus.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Ba Ba banküberfall Erste Allgemeine Verunsicherung.mp3">
+    <None Update="Resources\Ba Ba banküberfall Erste Allgemeine Verunsicherung.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Nightcore - PlayXSpectre.mp3">
+    <None Update="Resources\Nightcore - PlayXSpectre.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Zelda.mp3">
+    <None Update="Resources\Zelda.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Backend\" />
   </ItemGroup>
 
 </Project>

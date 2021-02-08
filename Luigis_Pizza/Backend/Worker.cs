@@ -5,17 +5,18 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ILogger = Backend.ILogger;
 
 namespace Luigis_Pizza.Backend
 {
     public class Worker
     {
-        private readonly AudioStreamer _audioStreamer;
+        private readonly IAudioStreamer _audioStreamer;
         private readonly DiscordClient _client;
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
 
-        private const string SoundFile = "Ressources/pizza.mp3";
-        private const string PizzaImage = "Ressources/pizza.jpg";
+        private const string SoundFile = "Resources/pizza.mp3";
+        private const string PizzaImage = "Resources/pizza.jpg";
 
         public Worker(DiscordClient client)
         {
@@ -25,7 +26,7 @@ namespace Luigis_Pizza.Backend
         }
 
         /// <summary>
-        ///     Connects to the voicechannel of a random member and plays a the pizza soundfile.
+        ///     Connects to the voice-channel of a random member and plays a the pizza sound-file.
         /// </summary>
         public async Task StartWorkerAsync()
         {
@@ -33,7 +34,7 @@ namespace Luigis_Pizza.Backend
 
             if (guild == null)
             {
-                throw new ArgumentNullException(
+                throw new ArgumentNullException($"{nameof(guild)}",
                     "The specified Guild was not found. Check the 'Guild' parameter in the configuration file.");
             }
 
@@ -43,12 +44,13 @@ namespace Luigis_Pizza.Backend
 
             if (membersWithVoiceStateUp == null)
             {
-                throw new ArgumentNullException("List of users with voicestate 'up' is null.");
+                throw new ArgumentNullException($"{nameof(membersWithVoiceStateUp)}",
+                    "List of users with voice-state 'up' is null.");
             }
 
             if (membersWithVoiceStateUp.Count == 0)
             {
-                _logger.Log("There are currently no users with voicestate 'up'.", LogLevel.Warning);
+                _logger.Log("There are currently no users with voice-state 'up'.", LogLevel.Warning);
                 return;
             }
 
@@ -59,7 +61,7 @@ namespace Luigis_Pizza.Backend
 
             if (!File.Exists(SoundFile) || !File.Exists(PizzaImage))
             {
-                throw new FileNotFoundException("Either image or soundfile is missing.");
+                throw new FileNotFoundException("Either image or sound-file is missing.");
             }
 
             try

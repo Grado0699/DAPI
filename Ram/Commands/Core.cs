@@ -15,7 +15,7 @@ namespace Ram.Commands
             var discordUser = await ctx.Client.GetUserAsync(UserIdFilib);
 
             await ctx.RespondAsync($"{discordUser.Mention}");
-            await ctx.RespondWithFileAsync("Ressources/ram_faggot.gif");
+            await ctx.RespondWithFileAsync("Resources/ram_faggot.gif");
         }
 
         [Command("startai")]

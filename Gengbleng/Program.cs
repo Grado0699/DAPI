@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.Logging;
+using ILogger = Backend.ILogger;
 
 namespace Gengbleng
 {
@@ -19,7 +20,7 @@ namespace Gengbleng
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
         private static Timer ClientTimer { get; set; }
-        private static Logger Logger { get; set; }
+        private static ILogger Logger { get; set; }
 
         private static void Main()
         {
@@ -53,7 +54,7 @@ namespace Gengbleng
                 MinimumLogLevel = LogLevel.Debug
             });
 
-            var clientEvents = new EventsClient(Client);
+            IEventsClient clientEvents = new EventsClient(Client);
 
             Client.Ready += clientEvents.Client_Ready;
             Client.GuildAvailable += clientEvents.Client_GuildAvailable;

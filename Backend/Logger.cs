@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Backend
 {
-    public class Logger
+    public class Logger : ILogger
     {
         private readonly DiscordClient _discordClient;
 

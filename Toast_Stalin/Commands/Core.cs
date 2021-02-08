@@ -36,7 +36,7 @@ namespace Toast_Stalin.Commands
         [Command("happybirthday"), Aliases("hb"), Description("Желаю тебе счастливого дня рождения, товарищ!")]
         public async Task HappyBirthday(CommandContext ctx, DiscordMember discordMember)
         {
-            await ctx.RespondWithFileAsync("Ressources/HappyBirthday.jpg", discordMember.Mention);
+            await ctx.RespondWithFileAsync("Resources/HappyBirthday.jpg", discordMember.Mention);
         }
     }
 }

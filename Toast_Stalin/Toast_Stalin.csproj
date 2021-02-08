@@ -35,40 +35,40 @@
     <None Update="opus.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Boris.mp3">
+    <None Update="Resources\Boris.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\ExaSupreme.mp3">
+    <None Update="Resources\ExaSupreme.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\HappyBirthday.jpg">
+    <None Update="Resources\HappyBirthday.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Slap_all.ogg">
+    <None Update="Resources\Slap_all.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Slap_hard.ogg">
+    <None Update="Resources\Slap_hard.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Slap_low.ogg">
+    <None Update="Resources\Slap_low.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Slap_medium.ogg">
+    <None Update="Resources\Slap_medium.ogg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\StalinExaSupreme.jpg">
+    <None Update="Resources\StalinExaSupreme.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\StalinGoulag.jpg">
+    <None Update="Resources\StalinGoulag.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\Supreme.mp3">
+    <None Update="Resources\Supreme.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\SupremePlus.mp3">
+    <None Update="Resources\SupremePlus.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\ToasterSound.mp3">
+    <None Update="Resources\ToasterSound.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

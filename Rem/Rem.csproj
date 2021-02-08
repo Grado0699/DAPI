@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <Folder Include="Commands\" />
-    <Folder Include="Ressources\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

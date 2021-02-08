@@ -11,72 +11,72 @@ namespace Toast_Stalin.Commands
         [Command("supreme"), Aliases("s"), Description("Slava!")]
         public async Task Supreme(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Supreme.mp3";
+            const string soundFile = "Resources/Supreme.mp3";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("supreme+"), Aliases("s+"), Description("Bogatyye!")]
         public async Task SupremePlus(CommandContext ctx)
         {
-            const string soundFile = "Ressources/SupremePlus.mp3";
+            const string soundFile = "Resources/SupremePlus.mp3";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("exasupreme"), Aliases("es"), Description("Moshchnost'!")]
         public async Task ExaSupreme(CommandContext ctx)
         {
-            const string soundFile = "Ressources/ExaSupreme.mp3";
+            const string soundFile = "Resources/ExaSupreme.mp3";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("boris"), Aliases("b"), Description("Moya lyubimaya muzyka, Boris!")]
         public async Task Hardbass(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Boris.mp3";
+            const string soundFile = "Resources/Boris.mp3";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
         [Command("slap"), Aliases("ls"), Description("Шлепок!")]
         public async Task SlapLow(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Slap_low.ogg";
+            const string soundFile = "Resources/Slap_low.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "100");
         }
 
         [Command("slapper"), Aliases("ms"), Description("Племянник!")]
         public async Task SlapMedium(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Slap_medium.ogg";
+            const string soundFile = "Resources/Slap_medium.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "100");
         }
 
         [Command("slappest"), Aliases("hs"), Description("Слаппест!")]
         public async Task SlapHard(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Slap_hard.ogg";
+            const string soundFile = "Resources/Slap_hard.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "100");
         }
 
         [Command("megaslap"), Aliases("m"), Description("Мегаслап!")]
         public async Task SlapAll(CommandContext ctx)
         {
-            const string soundFile = "Ressources/Slap_all.ogg";
+            const string soundFile = "Resources/Slap_all.ogg";
 
-            var audioStreamer = new AudioStreamer(ctx.Client);
+            IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "100");
         }
 
