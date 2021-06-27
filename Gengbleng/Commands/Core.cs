@@ -7,71 +7,53 @@ using System.IO;
 using System.Threading.Tasks;
 using DSharpPlus.VoiceNext;
 
-namespace Gengbleng.Commands
-{
-    public class Core : BaseCommandModule
-    {
+namespace Gengbleng.Commands {
+    public class Core : BaseCommandModule {
         public static double TimerSpan = 1800000;
         public static bool EnableTimer;
 
         [Command("settimer"), Aliases("t"), Description("Enable/disable the timer.")]
-        public async Task SetTimer(CommandContext ctx)
-        {
+        public async Task SetTimer(CommandContext ctx) {
             var interActExt = ctx.Client.GetInteractivity();
 
-            if (EnableTimer)
-            {
+            if (EnableTimer) {
                 await ctx.RespondAsync($"Current status of timer is `{EnableTimer}`. Deactivate timer? [y/n]");
-            }
-            else
-            {
+            } else {
                 await ctx.RespondAsync($"Current status of timer is `{EnableTimer}`. Activate timer? [y/n]");
             }
 
-            var message =
-                await interActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
+            var message = await interActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
 
-            if (message.Result.Content.ToLower().Contains("y"))
-            {
+            if (message.Result.Content.ToLower().Contains("y")) {
                 EnableTimer = !EnableTimer;
                 await ctx.RespondAsync($"Timer set to `{EnableTimer}`.");
-            }
-            else if (message.Result.Content.ToLower().Contains("n"))
-            {
+            } else if (message.Result.Content.ToLower().Contains("n")) {
                 await ctx.RespondAsync("Do nothing.");
-            }
-            else
-            {
+            } else {
                 await ctx.RespondAsync("Invalid input.");
             }
         }
 
         [Command("interval"), Aliases("i"), Description("Set new timer interval.")]
-        public async Task SetInterval(CommandContext ctx)
-        {
+        public async Task SetInterval(CommandContext ctx) {
             var interActExt = ctx.Client.GetInteractivity();
 
             await ctx.RespondAsync($"Current interval is `{TimerSpan / 1000d}`. Enter new interval in `x seconds`:");
 
-            var message =
-                await interActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
+            var message = await interActExt.WaitForMessageAsync(xm => xm.Author.Id == ctx.User.Id, TimeSpan.FromMinutes(1));
 
-            if (double.TryParse(message.Result.Content, out TimerSpan))
-            {
+            if (double.TryParse(message.Result.Content, out TimerSpan)) {
                 TimerSpan *= 1000d;
 
                 await ctx.RespondAsync($"Interval set to: `{TimerSpan / 1000d}` seconds.");
-            }
-            else
-            {
+            } else {
                 TimerSpan = 1800000;
                 await ctx.RespondAsync($"Invalid input. Set interval to default value: `{TimerSpan / 1000d}` seconds.");
             }
         }
 
         [Command("barrel"), Aliases("b"), Description("BARREL!")]
-        public async Task Barrel(CommandContext ctx)
-        {
+        public async Task Barrel(CommandContext ctx) {
             const string soundFile = "Resources/E1.ogg";
 
             IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
@@ -79,8 +61,7 @@ namespace Gengbleng.Commands
         }
 
         [Command("shotgunknees"), Aliases("s"), Description("Plays the 'Shotgun-Knees' sound.")]
-        public async Task ShotgunKnees(CommandContext ctx)
-        {
+        public async Task ShotgunKnees(CommandContext ctx) {
             const string soundFile = "Resources/ShotgunKnees.ogg";
 
             IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
@@ -88,15 +69,13 @@ namespace Gengbleng.Commands
         }
 
         [Command("random"), Aliases("r"), Description("Plays a random soundfile.")]
-        public async Task PlayRandomSoundFile(CommandContext ctx)
-        {
+        public async Task PlayRandomSoundFile(CommandContext ctx) {
             var random = new Random();
 
             var allSoundFiles = Directory.GetFiles(@"Resources/", "*.ogg");
             var randomSoundFile = allSoundFiles[random.Next(0, allSoundFiles.Length - 1)];
 
-            if (!File.Exists(randomSoundFile))
-            {
+            if (!File.Exists(randomSoundFile)) {
                 throw new FileNotFoundException("Either image or soundfile is missing.");
             }
 
@@ -105,8 +84,7 @@ namespace Gengbleng.Commands
         }
 
         [Command("shanty"), Aliases("sh"), Description("Plays a random shanty.")]
-        public async Task PlayShanty(CommandContext ctx)
-        {
+        public async Task PlayShanty(CommandContext ctx) {
             const string soundFile = "Resources/ShantyLeaveHerJohnny.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
@@ -114,8 +92,7 @@ namespace Gengbleng.Commands
         }
 
         [Command("yooooooooooo"), Aliases("y"), Description("Plays yooooooooooo.")]
-        public async Task PlayYooooo(CommandContext ctx)
-        {
+        public async Task PlayYooooo(CommandContext ctx) {
             const string soundFile = "Resources/Yooooooooooo.ogg";
 
             IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
@@ -123,8 +100,7 @@ namespace Gengbleng.Commands
         }
 
         [Command("shit"), Aliases("arrr"), Description("Plays Shit Boat from Alestorm.")]
-        public async Task ShitBoat(CommandContext ctx)
-        {
+        public async Task ShitBoat(CommandContext ctx) {
             const string soundFile = "Resources/ShitBoat.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
@@ -132,8 +108,7 @@ namespace Gengbleng.Commands
         }
 
         [Command("fuck"), Aliases("f"), Description("Plays Fucked With An Anchor from Alestorm.")]
-        public async Task FuckedWithAnAnchor(CommandContext ctx)
-        {
+        public async Task FuckedWithAnAnchor(CommandContext ctx) {
             const string soundFile = "Resources/FuckedWithAnAnchor.ogg";
 
             IAudioStreamer audioStreamer = new AudioStreamer(ctx.Client);
@@ -141,18 +116,15 @@ namespace Gengbleng.Commands
         }
 
         [Command("whatdoesapirateneed"), Aliases(""), Description("Tells you want a pirate needs.")]
-        public async Task WhatDoesAPiratNeed(CommandContext ctx)
-        {
+        public async Task WhatDoesAPiratNeed(CommandContext ctx) {
             const string soundFile = "Resources/Alestorm.ogg";
 
             var audioStreamer = new AudioStreamer(ctx.Client);
             await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member.VoiceState.Channel, "10");
         }
 
-
         [Command("leave"), Aliases("l"), Description("Leaves the current voice channel.")]
-        public async Task LeaveChannel(CommandContext ctx)
-        {
+        public async Task LeaveChannel(CommandContext ctx) {
             var voiceNextExt = ctx.Client.GetVoiceNext();
             var voiceConnection = voiceNextExt.GetConnection(ctx.Guild);
 

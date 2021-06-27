@@ -13,46 +13,33 @@ using System.Threading.Tasks;
 using System.Timers;
 using ILogger = Backend.ILogger;
 
-namespace Luigis_Pizza
-{
-    internal class Program
-    {
+namespace Luigis_Pizza {
+    internal class Program {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
         private static Timer ClientTimer { get; set; }
         private static ILogger Logger { get; set; }
 
-        private static void Main()
-        {
+        private static void Main() {
             MainAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
-        private static async Task MainAsync()
-        {
-            try
-            {
+        private static async Task MainAsync() {
+            try {
                 await ConfigLoader.LoadConfigurationFromFileAsync();
             }
-            catch (FileNotFoundException fileNotFoundException)
-            {
+            catch (FileNotFoundException fileNotFoundException) {
                 Console.WriteLine($"{fileNotFoundException}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
-            catch (Exception exception)
-            {
+            catch (Exception exception) {
                 Console.WriteLine($"{exception}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
 
-            Client = new DiscordClient(new DiscordConfiguration
-            {
-                Token = ConfigLoader.Token,
-                TokenType = TokenType.Bot,
-                AutoReconnect = true,
-                MinimumLogLevel = LogLevel.Debug
-            });
+            Client = new DiscordClient(new DiscordConfiguration {Token = ConfigLoader.Token, TokenType = TokenType.Bot, AutoReconnect = true, MinimumLogLevel = LogLevel.Debug});
 
             IEventsClient clientEvents = new EventsClient(Client);
 
@@ -63,8 +50,7 @@ namespace Luigis_Pizza
             Logger = new Logger(Client);
             Logger.Log("Client initialized successfully.", LogLevel.Information);
 
-            ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
-            {
+            ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration {
                 UseDefaultCommandHandler = true,
                 StringPrefixes = ConfigLoader.CommandPrefix,
                 CaseSensitive = false,
@@ -79,14 +65,12 @@ namespace Luigis_Pizza
 
             Logger.Log("Command - Handler initialized successfully.", LogLevel.Information);
 
-            try
-            {
+            try {
                 ComNextExt.RegisterCommands<Core>();
                 Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
-            catch (Exception exception)
-            {
-                Logger.Log($"An error occured while registering the commands.\n{exception}", LogLevel.Error);
+            catch (Exception exception) {
+                Logger.Log($"An error occurred while registering the commands.\n{exception}", LogLevel.Error);
 
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
@@ -94,30 +78,20 @@ namespace Luigis_Pizza
                 return;
             }
 
-            Client.UseVoiceNext(new VoiceNextConfiguration
-            {
-                EnableIncoming = false
-            });
+            Client.UseVoiceNext(new VoiceNextConfiguration {EnableIncoming = false});
 
             Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
 
-            Client.UseInteractivity(new InteractivityConfiguration
-            {
-                Timeout = TimeSpan.FromSeconds(30)
-            });
+            Client.UseInteractivity(new InteractivityConfiguration {Timeout = TimeSpan.FromSeconds(30)});
 
             Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
 
-            try
-            {
+            try {
                 await Client.ConnectAsync();
                 Logger.Log("Connected to the API successfully.", LogLevel.Information);
             }
-            catch (Exception exception)
-            {
-                Logger.Log(
-                    $"An error occured while connecting to the API. Maybe the wrong token was provided.\n{exception}",
-                    LogLevel.Error);
+            catch (Exception exception) {
+                Logger.Log($"An error occurred while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
 
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
@@ -134,40 +108,31 @@ namespace Luigis_Pizza
             await Task.Delay(-1);
         }
 
-        private static async void ClientTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
+        private static async void ClientTimer_Elapsed(object sender, ElapsedEventArgs e) {
             Logger.Log("Timer-Elapsed-Event executed.", LogLevel.Information);
 
             ClientTimer.Stop();
 
-            if (Core.EnableTimer)
-            {
+            if (Core.EnableTimer) {
                 Logger.Log("Timer is enabled: going to start the worker.", LogLevel.Information);
 
-                try
-                {
+                try {
                     var clientWorker = new Worker(Client);
                     await clientWorker.StartWorkerAsync();
                 }
-                catch (ArgumentNullException argumentNullException)
-                {
+                catch (ArgumentNullException argumentNullException) {
                     Logger.Log($"{argumentNullException}", LogLevel.Error);
                 }
-                catch (FileNotFoundException fileNotFoundException)
-                {
+                catch (FileNotFoundException fileNotFoundException) {
                     Logger.Log($"{fileNotFoundException}", LogLevel.Error);
                 }
-                catch (PlatformNotSupportedException platformNotSupportedException)
-                {
+                catch (PlatformNotSupportedException platformNotSupportedException) {
                     Logger.Log($"{platformNotSupportedException}", LogLevel.Error);
                 }
-                catch (Exception exception)
-                {
+                catch (Exception exception) {
                     Logger.Log($"{exception}", LogLevel.Error);
                 }
-            }
-            else
-            {
+            } else {
                 Logger.Log("Timer is disabled.", LogLevel.Information);
             }
 

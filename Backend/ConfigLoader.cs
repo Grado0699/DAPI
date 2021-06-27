@@ -3,10 +3,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Backend
-{
-    public static class ConfigLoader
-    {
+namespace Backend {
+    public static class ConfigLoader {
         private const string ConfigFileName = "Config.json";
         public static string[] CommandPrefix { get; set; }
         public static ulong DefaultChannelId { get; set; }
@@ -17,10 +15,8 @@ namespace Backend
         /// <summary>
         ///     Loads all properties of the configuration file.
         /// </summary>
-        public static async Task LoadConfigurationFromFileAsync()
-        {
-            if (!File.Exists(ConfigFileName))
-            {
+        public static async Task LoadConfigurationFromFileAsync() {
+            if (!File.Exists(ConfigFileName)) {
                 throw new FileNotFoundException($"The configuration file '{ConfigFileName}' is missing.");
             }
 
@@ -36,8 +32,7 @@ namespace Backend
             Token = configuration.Token;
         }
 
-        private struct ConfigJson
-        {
+        private struct ConfigJson {
             [JsonProperty("Prefix")] public string[] CommandPrefix { get; private set; }
             [JsonProperty("DefaultChannel")] public ulong DefaultChannelId { get; private set; }
             [JsonProperty("GoulagChannel")] public ulong GulagChannelId { get; private set; }

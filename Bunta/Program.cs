@@ -11,45 +11,32 @@ using System.IO;
 using System.Threading.Tasks;
 using ILogger = Backend.ILogger;
 
-namespace Bunta
-{
-    internal class Program
-    {
+namespace Bunta {
+    internal class Program {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension ComNextExt { get; set; }
         private static ILogger Logger { get; set; }
 
-        private static void Main()
-        {
+        private static void Main() {
             MainAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
-        private static async Task MainAsync()
-        {
-            try
-            {
+        private static async Task MainAsync() {
+            try {
                 await ConfigLoader.LoadConfigurationFromFileAsync();
             }
-            catch (FileNotFoundException fileNotFoundEx)
-            {
+            catch (FileNotFoundException fileNotFoundEx) {
                 Console.WriteLine($"{fileNotFoundEx}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine($"{ex}\n\nPress any key to continue...");
                 Console.ReadKey();
                 return;
             }
 
-            Client = new DiscordClient(new DiscordConfiguration
-            {
-                Token = ConfigLoader.Token,
-                TokenType = TokenType.Bot,
-                AutoReconnect = true,
-                MinimumLogLevel = LogLevel.Debug
-            });
+            Client = new DiscordClient(new DiscordConfiguration {Token = ConfigLoader.Token, TokenType = TokenType.Bot, AutoReconnect = true, MinimumLogLevel = LogLevel.Debug});
 
             IEventsClient clientEvents = new EventsClient(Client);
 
@@ -61,8 +48,7 @@ namespace Bunta
 
             Logger.Log("Client initialized successfully.", LogLevel.Information);
 
-            ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration
-            {
+            ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration {
                 UseDefaultCommandHandler = true,
                 StringPrefixes = ConfigLoader.CommandPrefix,
                 CaseSensitive = false,
@@ -77,16 +63,14 @@ namespace Bunta
 
             Logger.Log("Command-Handler initialized successfully.", LogLevel.Information);
 
-            try
-            {
+            try {
                 ComNextExt.RegisterCommands<Core>();
                 ComNextExt.RegisterCommands<Voice>();
 
                 Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
-            catch
-            {
-                Logger.Log("An error occured while registering the commands.", LogLevel.Error);
+            catch {
+                Logger.Log("An error occurred while registering the commands.", LogLevel.Error);
 
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
@@ -94,31 +78,22 @@ namespace Bunta
                 return;
             }
 
-            Client.UseVoiceNext(new VoiceNextConfiguration
-            {
-                EnableIncoming = false
-            });
+            Client.UseVoiceNext(new VoiceNextConfiguration {EnableIncoming = false});
 
             Logger.Log("Voice-Handler initialized successfully.", LogLevel.Information);
 
-            Client.UseInteractivity(new InteractivityConfiguration
-            {
-                Timeout = TimeSpan.FromSeconds(30)
-            });
+            Client.UseInteractivity(new InteractivityConfiguration {Timeout = TimeSpan.FromSeconds(30)});
 
             Logger.Log("Interactivity-Handler initialized successfully.", LogLevel.Information);
 
-            try
-            {
+            try {
                 await Client.ConnectAsync();
                 Logger.Log("Connected to the API successfully.", LogLevel.Information);
             }
-            catch
-            {
-                Logger.Log("An error occured while connecting to the API. Maybe the wrong token was provided.",
-                    LogLevel.Error);
+            catch {
+                Logger.Log("An error occurred while connecting to the API. Maybe the wrong token was provided.", LogLevel.Error);
 
-                Console.WriteLine($"Press any key to continue...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
 
                 return;

@@ -6,15 +6,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Backend
-{
-    public class AudioStreamer : IAudioStreamer
-    {
+namespace Backend {
+    public class AudioStreamer : IAudioStreamer {
         private readonly DiscordClient _client;
         private readonly Logger _logger;
 
-        public AudioStreamer(DiscordClient client)
-        {
+        public AudioStreamer(DiscordClient client) {
             _client = client;
             _logger = new Logger(client);
         }
@@ -22,15 +19,13 @@ namespace Backend
         /// <summary>
         ///     Connects to the a channel and plays a sound-file.
         /// </summary>
-        public async Task PlaySoundFileAsync(string soundFile, DiscordChannel voiceChannel, string volume = "100")
-        {
+        public async Task PlaySoundFileAsync(string soundFile, DiscordChannel voiceChannel, string volume = "100") {
             var voiceNextExt = _client.GetVoiceNext();
 
             var guild = _client.Guilds.Values.FirstOrDefault(x => x.Id == ConfigLoader.GuildId);
             var voiceConnection = voiceNextExt.GetConnection(guild);
 
-            if (voiceConnection != null)
-            {
+            if (voiceConnection != null) {
                 voiceConnection.Disconnect();
                 _logger.Log("An old connection was still up, successfully closed old one.", LogLevel.Warning);
             }
@@ -39,12 +34,8 @@ namespace Backend
 
             _logger.Log("Connected to channel successfully.", LogLevel.Information);
 
-            var streamer = new ProcessStartInfo
-            {
-                FileName = "ffmpeg",
-                Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}",
-                RedirectStandardOutput = true,
-                UseShellExecute = false
+            var streamer = new ProcessStartInfo {
+                FileName = "ffmpeg", Arguments = $@"-i ""{soundFile}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet -vol {volume}", RedirectStandardOutput = true, UseShellExecute = false
             };
 
             _logger.Log("Initialized streamer successfully.", LogLevel.Debug);

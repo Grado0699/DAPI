@@ -10,9 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Bunta.Commands
-{
-    public class Voice : BaseCommandModule
-    {
+namespace Bunta.Commands {
+    public class Voice : BaseCommandModule {
     }
 }
