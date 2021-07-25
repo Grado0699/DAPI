@@ -36,7 +36,12 @@ namespace Ram {
                 return;
             }
 
-            Client = new DiscordClient(new DiscordConfiguration {Token = ConfigLoader.Token, TokenType = TokenType.Bot, AutoReconnect = true, MinimumLogLevel = LogLevel.Debug});
+            Client = new DiscordClient(new DiscordConfiguration {
+                Token = ConfigLoader.Token,
+                TokenType = TokenType.Bot,
+                AutoReconnect = true,
+                MinimumLogLevel = LogLevel.Debug
+            });
 
             IEventsClient clientEvents = new EventsClient(Client);
 
@@ -75,11 +80,15 @@ namespace Ram {
                 return;
             }
 
-            Client.UseVoiceNext(new VoiceNextConfiguration {EnableIncoming = false});
+            Client.UseVoiceNext(new VoiceNextConfiguration {
+                EnableIncoming = false
+            });
 
             Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
 
-            Client.UseInteractivity(new InteractivityConfiguration {Timeout = TimeSpan.FromSeconds(30)});
+            Client.UseInteractivity(new InteractivityConfiguration {
+                Timeout = TimeSpan.FromSeconds(30)
+            });
 
             Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
 

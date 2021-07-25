@@ -3,8 +3,11 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.Lavalink;
+using DSharpPlus.Net;
 using DSharpPlus.VoiceNext;
 using Microsoft.Extensions.Logging;
+using Rem.Commands;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -35,7 +38,12 @@ namespace Rem {
                 return;
             }
 
-            Client = new DiscordClient(new DiscordConfiguration {Token = ConfigLoader.Token, TokenType = TokenType.Bot, AutoReconnect = true, MinimumLogLevel = LogLevel.Debug});
+            Client = new DiscordClient(new DiscordConfiguration {
+                Token = ConfigLoader.Token,
+                TokenType = TokenType.Bot,
+                AutoReconnect = true,
+                MinimumLogLevel = LogLevel.Debug
+            });
 
             IEventsClient clientEvents = new EventsClient(Client);
 
@@ -62,7 +70,7 @@ namespace Rem {
             Logger.Log("Command - Handler initialized successfully.", LogLevel.Information);
 
             try {
-                //ComNextExt.RegisterCommands<Core>();
+                ComNextExt.RegisterCommands<MusicPlayer>();
                 Logger.Log("Registered commands successfully.", LogLevel.Information);
             }
             catch (Exception exception) {
@@ -74,11 +82,29 @@ namespace Rem {
                 return;
             }
 
-            Client.UseVoiceNext(new VoiceNextConfiguration {EnableIncoming = false});
+            var lavaLinkEndpoint = new ConnectionEndpoint {
+                Hostname = "127.0.0.1",
+                Port = 2333
+            };
+
+            var lavaLinkConfig = new LavalinkConfiguration {
+                Password = "12344",
+                RestEndpoint = lavaLinkEndpoint,
+                SocketEndpoint = lavaLinkEndpoint
+            };
+
+            var lavaLinkExtension = Client.UseLavalink();
+
+
+            Client.UseVoiceNext(new VoiceNextConfiguration {
+                EnableIncoming = false
+            });
 
             Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
 
-            Client.UseInteractivity(new InteractivityConfiguration {Timeout = TimeSpan.FromSeconds(30)});
+            Client.UseInteractivity(new InteractivityConfiguration {
+                Timeout = TimeSpan.FromSeconds(30)
+            });
 
             Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
 
@@ -88,6 +114,19 @@ namespace Rem {
             }
             catch (Exception exception) {
                 Logger.Log($"An error occurred while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
+
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+
+                return;
+            }
+
+            try {
+                await lavaLinkExtension.ConnectAsync(lavaLinkConfig);
+                Logger.Log("Connected to the LavaLink player successfully.", LogLevel.Information);
+            }
+            catch (Exception exception) {
+                Logger.Log($"An error occurred while connecting to the LavaLink player. Maybe the wrong credentials were provided.\n{exception}", LogLevel.Error);
 
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
