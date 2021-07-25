@@ -94,8 +94,7 @@ namespace Rem {
             };
 
             var lavaLinkExtension = Client.UseLavalink();
-
-
+            
             Client.UseVoiceNext(new VoiceNextConfiguration {
                 EnableIncoming = false
             });

@@ -1,7 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 namespace Rem.Commands {
     public class MusicPlayer : BaseCommandModule {
         [Command]
-        public async Task Join(CommandContext ctx, DiscordChannel channel) {
+        public async Task Join(CommandContext ctx) {
             var lava = ctx.Client.GetLavalink();
 
             if (!lava.ConnectedNodes.Any()) {
@@ -18,6 +17,7 @@ namespace Rem.Commands {
             }
 
             var node = lava.ConnectedNodes.Values.First();
+            var channel = ctx.Member.VoiceState.Channel;
 
             if (channel.Type != ChannelType.Voice) {
                 await ctx.RespondAsync("Not a valid voice channel.");
@@ -29,7 +29,7 @@ namespace Rem.Commands {
         }
 
         [Command]
-        public async Task Leave(CommandContext ctx, DiscordChannel channel) {
+        public async Task Leave(CommandContext ctx) {
             var lava = ctx.Client.GetLavalink();
 
             if (!lava.ConnectedNodes.Any()) {
@@ -38,6 +38,7 @@ namespace Rem.Commands {
             }
 
             var node = lava.ConnectedNodes.Values.First();
+            var channel = ctx.Member.VoiceState.Channel;
 
             if (channel.Type != ChannelType.Voice) {
                 await ctx.RespondAsync("Not a valid voice channel.");
@@ -80,6 +81,7 @@ namespace Rem.Commands {
 
             var track = loadResult.Tracks.First();
 
+            await conn.SetVolumeAsync(5);
             await conn.PlayAsync(track);
 
             await ctx.RespondAsync($"Now playing {track.Title}!");
