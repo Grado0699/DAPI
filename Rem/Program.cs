@@ -28,13 +28,11 @@ namespace Rem {
                 await ConfigLoader.LoadConfigurationFromFileAsync();
             }
             catch (FileNotFoundException fileNotFoundException) {
-                Console.WriteLine($"{fileNotFoundException}\n\nPress any key to continue...");
-                Console.ReadKey();
+                Console.WriteLine($"{fileNotFoundException}\n");
                 return;
             }
             catch (Exception exception) {
-                Console.WriteLine($"{exception}\n\nPress any key to continue...");
-                Console.ReadKey();
+                Console.WriteLine($"{exception}\n");
                 return;
             }
 
@@ -75,10 +73,6 @@ namespace Rem {
             }
             catch (Exception exception) {
                 Logger.Log($"An error occurred while registering the commands.\n{exception}", LogLevel.Error);
-
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-
                 return;
             }
 
@@ -94,7 +88,7 @@ namespace Rem {
             };
 
             var lavaLinkExtension = Client.UseLavalink();
-            
+
             Client.UseVoiceNext(new VoiceNextConfiguration {
                 EnableIncoming = false
             });
@@ -113,10 +107,6 @@ namespace Rem {
             }
             catch (Exception exception) {
                 Logger.Log($"An error occurred while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
-
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-
                 return;
             }
 
@@ -126,10 +116,6 @@ namespace Rem {
             }
             catch (Exception exception) {
                 Logger.Log($"An error occurred while connecting to the LavaLink player. Maybe the wrong credentials were provided.\n{exception}", LogLevel.Error);
-
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-
                 return;
             }
 
