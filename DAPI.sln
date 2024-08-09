@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ram", "Ram\Ram.csproj", "{C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rem", "Rem\Rem.csproj", "{5EE695CF-326C-40CD-8CE7-F316E9AB783C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holo", "Holo\Holo.csproj", "{00B871F2-C747-4FAE-BFE4-E586F3088579}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{5EE695CF-326C-40CD-8CE7-F316E9AB783C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE695CF-326C-40CD-8CE7-F316E9AB783C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE695CF-326C-40CD-8CE7-F316E9AB783C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00B871F2-C747-4FAE-BFE4-E586F3088579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00B871F2-C747-4FAE-BFE4-E586F3088579}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00B871F2-C747-4FAE-BFE4-E586F3088579}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00B871F2-C747-4FAE-BFE4-E586F3088579}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

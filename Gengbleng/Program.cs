@@ -3,141 +3,120 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.VoiceNext;
-using Gengbleng.Backend;
-using Gengbleng.Commands;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Timers;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands;
+using Gengbleng.Commands;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ILogger = Backend.ILogger;
+using Serilog;
 
-namespace Gengbleng {
-    internal class Program {
-        private static DiscordClient Client { get; set; }
-        private static CommandsNextExtension ComNextExt { get; set; }
-        private static Timer ClientTimer { get; set; }
-        private static ILogger Logger { get; set; }
+namespace Gengbleng;
 
-        private static void Main() {
-            MainAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+internal class Program {
+    private static DiscordClient Client { get; set; }
+    private static CommandsNextExtension ComNextExt { get; set; }
+
+    private static void Main() {
+        MainAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+    }
+
+    private static async Task MainAsync() {
+        Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+
+        var logFactory = new LoggerFactory().AddSerilog();
+        var logger = logFactory.CreateLogger<Program>();
+
+        try {
+            await ConfigLoader.LoadConfigurationFromFileAsync();
+        }
+        catch (FileNotFoundException fileNotFoundException) {
+            logger.LogError($"{fileNotFoundException}\n\nPress any key to continue...");
+            Console.ReadKey();
+
+            return;
+        }
+        catch (Exception exception) {
+            logger.LogError($"{exception}\n\nPress any key to continue...");
+            Console.ReadKey();
+
+            return;
         }
 
-        private static async Task MainAsync() {
-            try {
-                await ConfigLoader.LoadConfigurationFromFileAsync();
-            }
-            catch (FileNotFoundException fileNotFoundException) {
-                Console.WriteLine($"{fileNotFoundException}\n\nPress any key to continue...");
-                Console.ReadKey();
-                return;
-            }
-            catch (Exception exception) {
-                Console.WriteLine($"{exception}\n\nPress any key to continue...");
-                Console.ReadKey();
-                return;
-            }
+        Client = new DiscordClient(new DiscordConfiguration {
+            Token = ConfigLoader.Token,
+            TokenType = TokenType.Bot,
+            AutoReconnect = true,
+            MinimumLogLevel = LogLevel.Debug,
+            LoggerFactory = logFactory,
+            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
+        });
 
-            Client = new DiscordClient(new DiscordConfiguration {Token = ConfigLoader.Token, TokenType = TokenType.Bot, AutoReconnect = true, MinimumLogLevel = LogLevel.Debug});
+        var services = new ServiceCollection().AddLogging().AddTransient<AudioStreamer>().BuildServiceProvider();
 
-            IEventsClient clientEvents = new EventsClient(Client);
+        IEventsClient clientEvents = new EventsClient();
 
-            Client.Ready += clientEvents.Client_Ready;
-            Client.GuildAvailable += clientEvents.Client_GuildAvailable;
-            Client.ClientErrored += clientEvents.Client_ClientError;
+        Client.Ready += clientEvents.Client_Ready;
+        Client.GuildAvailable += clientEvents.Client_GuildAvailable;
+        Client.ClientErrored += clientEvents.Client_ClientError;
 
-            Logger = new Logger(Client);
-            Logger.Log("Client initialized successfully.", LogLevel.Information);
+        logger.LogInformation("Client initialized successfully");
 
-            ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration {
-                UseDefaultCommandHandler = true,
-                StringPrefixes = ConfigLoader.CommandPrefix,
-                CaseSensitive = false,
-                EnableDefaultHelp = true,
-                EnableMentionPrefix = true,
-                DmHelp = false,
-                EnableDms = false
-            });
+        ComNextExt = Client.UseCommandsNext(new CommandsNextConfiguration {
+            UseDefaultCommandHandler = true,
+            StringPrefixes = ConfigLoader.CommandPrefix,
+            CaseSensitive = false,
+            EnableDefaultHelp = true,
+            EnableMentionPrefix = true,
+            DmHelp = false,
+            EnableDms = false,
+            Services = services
+        });
 
-            ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
-            ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
+        ComNextExt.CommandExecuted += clientEvents.Commands_CommandExecuted;
+        ComNextExt.CommandErrored += clientEvents.Commands_CommandErrored;
 
-            Logger.Log("Command - Handler initialized successfully.", LogLevel.Information);
+        logger.LogInformation("Command-Handler initialized successfully");
 
-            try {
-                ComNextExt.RegisterCommands<Core>();
-                Logger.Log("Registered commands successfully.", LogLevel.Information);
-            }
-            catch (Exception exception) {
-                Logger.Log($"An error occurred while registering the commands.\n{exception}", LogLevel.Error);
+        try {
+            ComNextExt.RegisterCommands<Commands.Commands>();
+            logger.LogInformation("Registered commands successfully");
+        }
+        catch (Exception exception) {
+            logger.LogError($"An error occurred while registering the commands:\n{exception}\n\nPress any key to continue...");
+            Console.ReadKey();
 
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-
-                return;
-            }
-
-            Client.UseVoiceNext(new VoiceNextConfiguration {EnableIncoming = false});
-
-            Logger.Log("Voice - Handler initialized successfully.", LogLevel.Information);
-
-            Client.UseInteractivity(new InteractivityConfiguration {Timeout = TimeSpan.FromSeconds(30)});
-
-            Logger.Log("Interactivity - Handler initialized successfully.", LogLevel.Information);
-
-            try {
-                await Client.ConnectAsync();
-                Logger.Log("Connected to the API successfully.", LogLevel.Information);
-            }
-            catch (Exception exception) {
-                Logger.Log($"An error occurred while connecting to the API. Maybe the wrong token was provided.\n{exception}", LogLevel.Error);
-
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
-
-                return;
-            }
-
-            ClientTimer = new Timer(Core.TimerSpan);
-            ClientTimer.Elapsed += ClientTimer_Elapsed;
-
-            Logger.Log("Timer initialized successfully.", LogLevel.Information);
-
-            ClientTimer.Start();
-            await Task.Delay(-1);
+            return;
         }
 
-        private static async void ClientTimer_Elapsed(object sender, ElapsedEventArgs e) {
-            Logger.Log("Timer-Elapsed-Event executed.", LogLevel.Debug);
+        var slashCommandsExtension = Client.UseSlashCommands();
+        slashCommandsExtension.RegisterCommands<SlashCommands>();
+        
+        Client.UseVoiceNext(new VoiceNextConfiguration {
+            EnableIncoming = false
+        });
 
-            ClientTimer.Stop();
+        logger.LogInformation("Voice - Handler initialized successfully");
 
-            if (Core.EnableTimer) {
-                Logger.Log("Timer is enabled: going to start the worker.", LogLevel.Information);
+        Client.UseInteractivity(new InteractivityConfiguration {
+            Timeout = TimeSpan.FromSeconds(30)
+        });
 
-                try {
-                    var streamer = new Streamer(Client);
-                    await streamer.PlayRandomSoundFile();
-                }
-                catch (ArgumentNullException argumentNullException) {
-                    Logger.Log($"{argumentNullException}", LogLevel.Error);
-                }
-                catch (FileNotFoundException fileNotFoundException) {
-                    Logger.Log($"{fileNotFoundException}", LogLevel.Error);
-                }
-                catch (PlatformNotSupportedException platformNotSupportedException) {
-                    Logger.Log($"{platformNotSupportedException}", LogLevel.Error);
-                }
-                catch (Exception exception) {
-                    Logger.Log($"{exception}", LogLevel.Error);
-                }
-            } else {
-                Logger.Log("Timer is disabled.", LogLevel.Warning);
-            }
+        logger.LogInformation("Interactivity - Handler initialized successfully");
 
-            ClientTimer.Interval = Core.TimerSpan;
-            ClientTimer.Start();
+        try {
+            await Client.ConnectAsync();
+            logger.LogInformation("Connected to the API successfully");
         }
+        catch (Exception exception) {
+            logger.LogError($"An error occurred while connecting to the API. Maybe the wrong token was provided?\n{exception}\n\nPress any key to continue...");
+            Console.ReadKey();
+
+            return;
+        }
+
+        await Task.Delay(-1);
     }
 }

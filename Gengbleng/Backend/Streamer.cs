@@ -5,18 +5,15 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ILogger = Backend.ILogger;
 
 namespace Gengbleng.Backend {
     public class Streamer {
         private readonly IAudioStreamer _audioStreamer;
         private readonly DiscordClient _client;
-        private readonly ILogger _logger;
 
         public Streamer(DiscordClient client) {
             _audioStreamer = new AudioStreamer(client);
             _client = client;
-            _logger = new Logger(client);
         }
 
         /// <summary>
@@ -37,14 +34,14 @@ namespace Gengbleng.Backend {
             }
 
             if (membersWithVoiceStateUp.Count == 0) {
-                _logger.Log("There are currently no users with voice-state 'up'.", LogLevel.Warning);
+                _client.Logger.LogWarning("There are currently no users with voice-state 'up'");
                 return;
             }
 
             var randomNumber = new Random();
             var randomMember = membersWithVoiceStateUp[randomNumber.Next(0, membersWithVoiceStateUp.Count - 1)];
 
-            _logger.Log("Retrieved a random member successfully.", LogLevel.Debug);
+            _client.Logger.LogDebug("Retrieved a random member successfully");
 
             var soundFiles = Directory.GetFiles(@"Resources/", "*.ogg");
             var soundFile = soundFiles[randomNumber.Next(0, soundFiles.Length - 1)];
@@ -57,13 +54,13 @@ namespace Gengbleng.Backend {
                 await _audioStreamer.PlaySoundFileAsync(soundFile, randomMember.VoiceState.Channel, "10");
             }
             catch (FileNotFoundException fileNotFoundException) {
-                _logger.Log($"{fileNotFoundException}", LogLevel.Error);
+                _client.Logger.LogError($"{fileNotFoundException}");
             }
             catch (PlatformNotSupportedException platformNotSupportedException) {
-                _logger.Log($"{platformNotSupportedException}", LogLevel.Error);
+                _client.Logger.LogError($"{platformNotSupportedException}");
             }
             catch (Exception exception) {
-                _logger.Log($"{exception}", LogLevel.Error);
+                _client.Logger.LogError($"{exception}");
             }
         }
     }

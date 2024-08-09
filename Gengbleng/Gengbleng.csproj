@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DSharpPlus" Version="4.1.0" />
-    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0" />
-    <PackageReference Include="DSharpPlus.Interactivity" Version="4.1.0" />
-    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.1.0" />
+    <PackageReference Include="DSharpPlus" Version="4.4.9" />
+    <PackageReference Include="DSharpPlus.CommandsNext" Version="4.4.9" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="4.4.9" />
+    <PackageReference Include="DSharpPlus.SlashCommands" Version="4.4.9" />
+    <PackageReference Include="DSharpPlus.VoiceNext" Version="4.4.9" />
+    <PackageReference Include="Serilog" Version="4.0.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -432,5 +437,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 
 </Project>

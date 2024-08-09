@@ -1,7 +1,6 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Toast_Stalin.Backend;
@@ -31,9 +30,8 @@ namespace Toast_Stalin.Commands {
 
         [Command("happybirthday"), Aliases("hb"), Description("Желаю тебе счастливого дня рождения, товарищ!")]
         public async Task HappyBirthday(CommandContext ctx, DiscordMember discordMember) {
-            await using var fs = new FileStream("Resources/HappyBirthday.jpg", FileMode.Open, FileAccess.Read);
-
-            await new DiscordMessageBuilder().WithContent(discordMember.Mention).WithFiles(new Dictionary<string, Stream> {{"Resources/HappyBirthday.jpg", fs}}).SendAsync(ctx.Channel);
+            await using var fileStream = new FileStream("Resources/HappyBirthday.jpg", FileMode.Open, FileAccess.Read);
+            await new DiscordMessageBuilder().WithContent(discordMember.Mention).AddFile(fileStream).SendAsync(ctx.Channel);
         }
     }
 }
