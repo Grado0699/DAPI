@@ -3,15 +3,16 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Backend; 
+namespace Backend;
 
 public static class ConfigLoader {
     private const string ConfigFileName = "Config.json";
-    public static string[] CommandPrefix { get; set; }
+    public static string[] CommandPrefix { get; private set; }
     public static ulong DefaultChannelId { get; set; }
-    public static ulong GulagChannelId { get; set; }
-    public static ulong GuildId { get; set; }
-    public static string Token { get; set; }
+    public static ulong GulagChannelId { get; private set; }
+    public static ulong GuildId { get; private set; }
+    public static string Token { get; private set; }
+    public static string ProxerProxyBasePath { get; private set; }
 
     /// <summary>
     ///     Loads all properties of the configuration file.
@@ -31,6 +32,7 @@ public static class ConfigLoader {
         GulagChannelId = configuration.GulagChannelId;
         GuildId = configuration.GuildId;
         Token = configuration.Token;
+        ProxerProxyBasePath = configuration.ProxerProxyBasePath;
     }
 
     private struct ConfigJson {
@@ -39,5 +41,6 @@ public static class ConfigLoader {
         [JsonProperty("GoulagChannel")] public ulong GulagChannelId { get; private set; }
         [JsonProperty("Guild")] public ulong GuildId { get; private set; }
         [JsonProperty("Token")] public string Token { get; private set; }
+        [JsonProperty("ProxerProxy_Base_Path")] public string ProxerProxyBasePath { get; private set; }
     }
 }

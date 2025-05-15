@@ -91,6 +91,14 @@ public class Commands : BaseCommandModule {
         var audioStreamer = new AudioStreamer(ctx.Client);
         await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member?.VoiceState.Channel, "10");
     }
+    
+    [Command("shantycursed"), Aliases("shc"), Description("Plays a random shanty.")]
+    public async Task PlayShantyCursed(CommandContext ctx) {
+        const string soundFile = "Resources/WellermanGawrGura.ogg";
+
+        var audioStreamer = new AudioStreamer(ctx.Client);
+        await audioStreamer.PlaySoundFileAsync(soundFile, ctx.Member?.VoiceState.Channel, "10");
+    }
 
     [Command("yooooooooooo"), Aliases("y"), Description("Plays yooooooooooo.")]
     public async Task PlayYooooo(CommandContext ctx) {

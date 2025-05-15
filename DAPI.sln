@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rem", "Rem\Rem.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Holo", "Holo\Holo.csproj", "{00B871F2-C747-4FAE-BFE4-E586F3088579}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bocchi", "Bocchi\Bocchi.csproj", "{8009F9BF-F70C-4AD7-A8BB-58FF9A7D9F08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erika", "Erika\Erika.csproj", "{325AF795-B763-46A3-8DF0-5420CE4C850E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{00B871F2-C747-4FAE-BFE4-E586F3088579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00B871F2-C747-4FAE-BFE4-E586F3088579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00B871F2-C747-4FAE-BFE4-E586F3088579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8009F9BF-F70C-4AD7-A8BB-58FF9A7D9F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8009F9BF-F70C-4AD7-A8BB-58FF9A7D9F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8009F9BF-F70C-4AD7-A8BB-58FF9A7D9F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8009F9BF-F70C-4AD7-A8BB-58FF9A7D9F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{325AF795-B763-46A3-8DF0-5420CE4C850E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325AF795-B763-46A3-8DF0-5420CE4C850E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325AF795-B763-46A3-8DF0-5420CE4C850E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325AF795-B763-46A3-8DF0-5420CE4C850E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
